@@ -3,41 +3,81 @@
 @section('content')
     <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
 
-    <div class="container">
-        <div class="row">
-            @php
-                $cards = [
-                    ['title' => 'Jumlah Pesanan', 'text' => 'Total pesanan yang masuk.', 'link' ],
-                    ['title' => 'Daftar Pelanggan', 'text' => 'Lihat semua pelanggan yang terdaftar.', 'link' ],
-                    ['title' => 'Layanan Tersedia', 'text' => 'Kelola layanan yang tersedia.', 'link' ],
-                    ['title' => 'Laporan Penjualan', 'text' => 'Lihat laporan penjualan per periode.', 'link'],
-                    ['title' => 'Pengaturan Akun', 'text' => 'Ubah data akun dan keamanan.', 'link'],
-                    ['title' => 'Bantuan & Support', 'text' => 'Dapatkan panduan penggunaan aplikasi.', 'link' ],
-                ];
-            @endphp
-
-            @foreach ($cards as $index => $card)
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm h-100 fade-in" style="animation-delay: {{ $index * 0.2 }}s;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $card['title'] }}</h5>
-                            <p class="card-text">{{ $card['text'] }}</p>
-                            <a href class="btn btn-primary">Lihat</a>
-                        </div>
-                    </div>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 fade-in text-center p-3">
+                <div class="mb-3 text-primary">
+                    <i class="fas fa-shopping-cart fa-2x"></i>
                 </div>
-            @endforeach
+                <h5 class="card-title mb-2">Jumlah Pesanan</h5>
+                <p class="card-text text-muted">Total pesanan yang masuk.</p>
+                <a href="#" class="btn btn-sm btn-primary">Lihat</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 fade-in text-center p-3">
+                <div class="mb-3 text-success">
+                    <i class="fas fa-users fa-2x"></i>
+                </div>
+                <h5 class="card-title mb-2">Daftar Pelanggan</h5>
+                <p class="card-text text-muted">Lihat semua pelanggan.</p>
+                <a href="#" class="btn btn-sm btn-success">Lihat</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 fade-in text-center p-3">
+                <div class="mb-3 text-warning">
+                    <i class="fas fa-concierge-bell fa-2x"></i>
+                </div>
+                <h5 class="card-title mb-2">Layanan Tersedia</h5>
+                <p class="card-text text-muted">Kelola layanan yang tersedia.</p>
+                <a href="#" class="btn btn-sm btn-warning text-white">Lihat</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 fade-in text-center p-3">
+                <div class="mb-3 text-danger">
+                    <i class="fas fa-chart-line fa-2x"></i>
+                </div>
+                <h5 class="card-title mb-2">Laporan Penjualan</h5>
+                <p class="card-text text-muted">Cek laporan penjualan.</p>
+                <a href="#" class="btn btn-sm btn-danger">Lihat</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 fade-in text-center p-3">
+                <div class="mb-3 text-info">
+                    <i class="fas fa-user-cog fa-2x"></i>
+                </div>
+                <h5 class="card-title mb-2">Pengaturan Akun</h5>
+                <p class="card-text text-muted">Atur data akun.</p>
+                <a href="#" class="btn btn-sm btn-info text-white">Lihat</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 fade-in text-center p-3">
+                <div class="mb-3 text-secondary">
+                    <i class="fas fa-question-circle fa-2x"></i>
+                </div>
+                <h5 class="card-title mb-2">Bantuan & Support</h5>
+                <p class="card-text text-muted">Panduan & bantuan.</p>
+                <a href="#" class="btn btn-sm btn-secondary">Lihat</a>
+            </div>
         </div>
     </div>
 @endsection
 
 @push('styles')
 <style>
-    /* Animasi fade-in */
     .fade-in {
         opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.6s forwards ease-in-out;
+        transform: translateY(15px);
+        animation: fadeInUp 0.5s forwards ease-in-out;
     }
     @keyframes fadeInUp {
         to {
@@ -46,13 +86,13 @@
         }
     }
 
-    /* Efek hover */
     .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
     .card:hover {
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
     }
 </style>
 @endpush
