@@ -19,7 +19,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('pelanggans', PelangganController::class);
+});
 Route::middleware(['auth', 'role:admin'])->get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 Route::middleware(['auth', 'role:pelanggan'])->get('/pelanggan/dashboard', [PelangganController::class, 'index'])->name('pelanggan.dashboard');
 

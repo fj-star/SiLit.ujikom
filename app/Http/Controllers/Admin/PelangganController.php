@@ -11,7 +11,7 @@ class PelangganController extends Controller
     public function index()
     {
         $pelanggans = Pelanggan::all();
-        return view('pages.admin.pelanggan.index', compact('pelanggans'));
+        return view('pages.admin.customer.index', compact('pelanggans'));
     }
 
     public function create()

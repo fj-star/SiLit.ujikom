@@ -21,9 +21,8 @@
                 <div class="mb-3 text-success">
                     <i class="fas fa-users fa-2x"></i>
                 </div>
-                <h5 class="card-title mb-2">Daftar Pelanggan</h5>
-                <p class="card-text text-muted">Lihat semua pelanggan.</p>
-                <a href="#" class="btn btn-sm btn-success">Lihat</a>
+                <h5 class="card-title mb-2">Tambah Pelanggan</h5>
+                <a href="{{ route('admin.pelanggans.index') }}" class="btn btn-sm btn-success">Tambah</a>
             </div>
         </div>
 
