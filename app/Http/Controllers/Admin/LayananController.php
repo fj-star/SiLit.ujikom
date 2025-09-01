@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Layanan;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class LayananController extends Controller
@@ -34,7 +34,7 @@ class LayananController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Layanan $layanan)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +42,7 @@ class LayananController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Layanan $layanan)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +50,7 @@ class LayananController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Layanan $layanan)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,7 +58,7 @@ class LayananController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Layanan $layanan)
+    public function destroy(string $id)
     {
         //
     }
