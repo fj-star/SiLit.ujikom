@@ -1,7 +1,10 @@
 @extends('layouts.main')
 
 @section('content')
-<div class="container">
+
+<div class="card">
+    <div class="card-body">
+        <div class="container">
     <h2 class="mb-4">Daftar Transaksi</h2>
     <a href="{{ route('admin.transaksi.create') }}" class="btn btn-primary mb-3">Tambah Transaksi</a>
 
@@ -29,7 +32,7 @@
                 <td>{{ $transaksi->layanan->nama_layanan ?? 'N/A' }}</td>
                 <td>{{ $transaksi->treatment->nama_treatment ?? '-' }}</td>
                 <td>{{ $transaksi->berat }} kg</td>
-                <td>@rupiah($transaksi->total_harga)</td>
+                <td>Rp {{ number_format($transaksi->total_harga,0,',','.') }}</td>
                 <td>{{ ucfirst($transaksi->status) }}</td>
                 <td>{{ ucfirst($transaksi->metode_pembayaran) }}</td>
                 <td>
@@ -48,4 +51,8 @@
         </tbody>
     </table>
 </div>
+    </div>
+</div>
+
+
 @endsection

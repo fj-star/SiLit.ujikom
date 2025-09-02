@@ -15,7 +15,7 @@ return new class extends Migration
         $table->id();
         $table->foreignId('pelanggan_id')->constrained('pelanggans')->onDelete('cascade');
         $table->foreignId('layanan_id')->constrained('layanans')->onDelete('cascade');
-        $table->foreignId('treatment_id')->nullable()->constrained('treatments')->onDelete('set null');
+        $table->foreignId('treatme nt_id')->nullable()->constrained('treatments')->onDelete('set null');
         $table->integer('berat'); // dalam kg
         $table->decimal('total_harga', 10, 2);
         $table->enum('metode_pembayaran', ['cash', 'transfer', 'ewallet'])->default('cash');

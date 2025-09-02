@@ -37,4 +37,8 @@ class Transaksi extends Model
     {
         return $this->belongsTo(Treatment::class, 'treatment_id');
     }
+//     public function logAktivitas()
+// {
+//     return $this->hasMany(LogAktivitas::class);
+// }
 }
