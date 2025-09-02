@@ -2,8 +2,9 @@
 
 @section('content')
 <div class="card p-4">
-    <h4 class="mb-3">{{ isset($transaksi) ? 'Edit Transaksi' : 'Tambah Transaksi' }}</h4>
+    <h4 class="mb-3">Tambah Treatment</h4>
 
+    {{-- Error --}}
     @if($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -14,73 +15,36 @@
         </div>
     @endif
 
-    <form action="{{ isset($transaksi) ? route('admin.transaksi.update',$transaksi) : route('admin.transaksi.store') }}" method="POST">
+    <form action="{{ route('admin.treatments.store') }}" method="POST">
         @csrf
-        @if(isset($transaksi))
-            @method('PUT')
-        @endif
 
-        {{-- Pelanggan --}}
-        <div class="mb-2">
-            <label>Pelanggan</label>
-            <select name="pelanggan_id" class="form-control">
-                <option value="">- Pilih Pelanggan -</option>
-                @foreach($pelanggans as $id => $name)
-                    <option value="{{ $id }}" {{ (isset($transaksi) && $transaksi->pelanggan_id==$id) ? 'selected' : '' }}>{{ $name }}</option>
-                @endforeach
-            </select>
+        {{-- Nama Treatment --}}
+        <div class="mb-3">
+            <label for="nama_treatment" class="form-label">Nama Treatment</label>
+            <input type="text" name="nama_treatment" id="nama_treatment" class="form-control" value="{{ old('nama_treatment') }}" required>
         </div>
 
-        {{-- Layanan --}}
-        <div class="mb-2">
-    <label>Layanan</label>
-    <select name="layanan_id" class="form-control">
-        <option value="">- Pilih Layanan -</option>
-        @foreach($layanans as $layanan)
-            <option value="{{ $layanan->id }}" {{ (isset($transaksi) && $transaksi->layanan_id==$layanan->id) ? 'selected' : '' }}>
-                {{ $layanan->nama_layanan }}
-            </option>
-        @endforeach
-    </select>
-</div>
-        {{-- Treatment --}}
-        <div class="mb-2">
-            <label>Treatment</label>
-            <select name="treatment_id" class="form-control">
-                <option value="">- Tidak ada -</option>
-                @foreach($treatments as $treatment)
-                    <option value="{{ $treatment->id }}" {{ (isset($transaksi) && $transaksi->treatment_id==$treatment->id) ? 'selected' : '' }}>
-                        {{ $treatment->nama }} - Rp {{ number_format($treatment->harga) }}
-                    </option>
-                @endforeach
-            </select>
+        {{-- Deskripsi --}}
+        <div class="mb-3">
+            <label for="deskripsi" class="form-label">Deskripsi</label>
+            <textarea name="deskripsi" id="deskripsi" class="form-control">{{ old('deskripsi') }}</textarea>
         </div>
 
-        {{-- Berat --}}
-        <div class="mb-2">
-            <label>Berat (kg)</label>
-            <input type="number" name="berat" class="form-control" step="0.1" min="0" value="{{ old('berat', $transaksi->berat ?? '') }}">
+        {{-- Harga --}}
+        <div class="mb-3">
+            <label for="harga" class="form-label">Harga</label>
+            <input type="number" name="harga" id="harga" class="form-control" step="0.01" value="{{ old('harga') }}" required>
         </div>
 
-        {{-- Metode Bayar --}}
-        <div class="mb-2">
-            <label>Metode Pembayaran</label>
-            <input type="text" name="metode_pembayaran" class="form-control" value="{{ old('metode_pembayaran', $transaksi->metode_pembayaran ?? '') }}">
+        {{-- Diskon --}}
+        <div class="mb-3">
+            <label for="diskon" class="form-label">Diskon (%)</label>
+            <input type="number" name="diskon" id="diskon" class="form-control" step="0.01" value="{{ old('diskon') }}">
         </div>
 
-        {{-- Status (Edit only) --}}
-        @isset($transaksi)
-        <div class="mb-2">
-            <label>Status</label>
-            <select name="status" class="form-control">
-                <option value="baru" {{ $transaksi->status=='baru'?'selected':'' }}>Baru</option>
-                <option value="proses" {{ $transaksi->status=='proses'?'selected':'' }}>Proses</option>
-                <option value="selesai" {{ $transaksi->status=='selesai'?'selected':'' }}>Selesai</option>
-            </select>
-        </div>
-        @endisset
-
-        <button type="submit" class="btn btn-primary">{{ isset($transaksi) ? 'Update' : 'Simpan' }}</button>
+        {{-- Tombol --}}
+        <button type="submit" class="btn btn-primary">Simpan</button>
+        <a href="{{ route('admin.treatments.index') }}" class="btn btn-secondary">Batal</a>
     </form>
 </div>
 @endsection
