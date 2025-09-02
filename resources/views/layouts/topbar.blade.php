@@ -16,8 +16,14 @@
         </div>
     </form>
 
+    
+
     <!-- Navbar -->
     <ul class="navbar-nav ml-auto">
+        <div class="navbar-right d-flex align-items-center">
+    <span class="user-name">{{ Auth::user()?->name }}</span>
+</div>
+
         <!-- Alerts, Messages, User Info (Copy dari HTML kamu) -->
         {{-- Tempelkan bagian notifikasi, pesan, user dropdown di sini --}}
     </ul>

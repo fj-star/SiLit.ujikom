@@ -3,63 +3,56 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Layanan;
 use Illuminate\Http\Request;
 
 class LayananController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $layanans = Layanan::all();
+        return view('pages.admin.layanan.indexL', compact('layanans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('pages.admin.layanan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_layanan' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'harga' => 'required|numeric',
+        ]);
+
+        Layanan::create($request->only('nama_layanan', 'deskripsi', 'harga'));
+
+        return redirect()->route('admin.layanans.index')->with('success', 'Layanan berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Layanan $layanan)
     {
-        //
+        return view('pages.admin.layanan.edit', compact('layanan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Layanan $layanan)
     {
-        //
+        $request->validate([
+            'nama_layanan' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'harga' => 'required|numeric',
+        ]);
+
+        $layanan->update($request->only('nama_layanan', 'deskripsi', 'harga'));
+
+        return redirect()->route('admin.layanans.index')->with('success', 'Layanan berhasil diperbarui.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Layanan $layanan)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $layanan->delete();
+        return redirect()->route('admin.layanans.index')->with('success', 'Layanan berhasil dihapus.');
     }
 }

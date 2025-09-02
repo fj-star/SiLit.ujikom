@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('treatments', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_treatment');
+            $table->text('deskripsi')->nullable();
+            $table->decimal('harga', 10, 2);
+             $table->decimal('diskon', 5, 2)->default(0); // diskon dalam persen
             $table->timestamps();
         });
     }

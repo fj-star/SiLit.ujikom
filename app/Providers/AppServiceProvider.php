@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Providers;
-use Laravel\Fortify\Contracts\LoginResponse;
-use App\Http\Responses\LoginResponse as CustomLoginResponse;
+
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -20,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Directive untuk format Rupiah
+            Blade::directive('rupiah', function ($expression) {
+        return "<?php echo 'Rp ' . number_format($expression, 0, ',', '.'); ?>";
+    });
+
+    // Directive Angka (tanpa Rp)
+    Blade::directive('angka', function ($expression) {
+        return "<?php echo number_format($expression, 0, ',', '.'); ?>";
+    });
     }
 }

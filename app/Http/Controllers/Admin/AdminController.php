@@ -15,7 +15,7 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('pages.admin.layanan.create');
+        return view('pages.admin.customer.create');
     }
 
     public function store(Request $request)

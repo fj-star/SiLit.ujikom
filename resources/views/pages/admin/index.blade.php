@@ -21,7 +21,8 @@
                 <div class="mb-3 text-success">
                     <i class="fas fa-users fa-2x"></i>
                 </div>
-                <h5 class="card-title mb-2">Tambah Pelanggan</h5>
+                <h5 class="card-title mb-2">Data Pelanggan</h5>
+                <p>halaman data pelangan</p>
                 <a href="{{ route('admin.pelanggans.index') }}" class="btn btn-sm btn-success">Tambah</a>
             </div>
         </div>
@@ -33,7 +34,7 @@
                 </div>
                 <h5 class="card-title mb-2">Layanan Tersedia</h5>
                 <p class="card-text text-muted">Kelola layanan yang tersedia.</p>
-                <a href="#" class="btn btn-sm btn-warning text-white">Lihat</a>
+                <a href="{{ route('admin.layanans.index') }}" class="btn btn-sm btn-warning text-white">Lihat</a>
             </div>
         </div>
 
@@ -51,11 +52,11 @@
         <div class="col-md-4 mb-4">
             <div class="card shadow h-100 fade-in text-center p-3">
                 <div class="mb-3 text-info">
-                    <i class="fas fa-user-cog fa-2x"></i>
+                    <i class="fas fa-solid fa-soap fa-2x"></i>
                 </div>
-                <h5 class="card-title mb-2">Pengaturan Akun</h5>
-                <p class="card-text text-muted">Atur data akun.</p>
-                <a href="#" class="btn btn-sm btn-info text-white">Lihat</a>
+                <h5 class="card-title mb-2">Treatment</h5>
+                <p class="card-text text-muted">tambahan harga</p>
+                <a href="{{ route('admin.treatments.index') }}" class="btn btn-sm btn-info text-white">Lihat</a>
             </div>
         </div>
 
@@ -64,9 +65,9 @@
                 <div class="mb-3 text-secondary">
                     <i class="fas fa-question-circle fa-2x"></i>
                 </div>
-                <h5 class="card-title mb-2">Bantuan & Support</h5>
-                <p class="card-text text-muted">Panduan & bantuan.</p>
-                <a href="#" class="btn btn-sm btn-secondary">Lihat</a>
+                <h5 class="card-title mb-2">Transaksi</h5>
+                <p class="card-text text-muted">Halaman keuangan</p>
+                <a href="{{ route('admin.transaksi.index') }}" class="btn btn-sm btn-secondary">Lihat</a>
             </div>
         </div>
     </div>

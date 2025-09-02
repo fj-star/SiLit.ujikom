@@ -1,65 +1,114 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
+use App\Models\Pelanggan;
+use App\Models\Layanan;
+use App\Models\Treatment;
 use Illuminate\Http\Request;
 
 class TransaksiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $transaksis = Transaksi::with(['pelanggan.user', 'layanan', 'treatment'])->get();
+        return view('pages.admin.transaksi.index', compact('transaksis'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $pelanggans = Pelanggan::with('user')->get();
+        $layanans   = Layanan::all();
+        $treatments = Treatment::all();
+
+        return view('pages.admin.transaksi.create', compact('pelanggans', 'layanans', 'treatments'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'pelanggan_id'      => 'required|exists:pelanggans,id',
+            'layanan_id'        => 'required|exists:layanans,id',
+            'treatment_id'      => 'nullable|exists:treatments,id',
+            'berat'             => 'required|numeric|min:1',
+            'metode_pembayaran' => 'required|in:cash,transfer,ewallet',
+            'status'            => 'required|in:pending,proses,selesai',
+            'created_by'        => 'required|in:admin,pelanggan',
+        ]);
+
+        // Hitung total harga
+        $validatedData['total_harga'] = $this->hitungTotalHarga(
+            $validatedData['layanan_id'],
+            $validatedData['treatment_id'] ?? null,
+            $validatedData['berat']
+        );
+
+        Transaksi::create($validatedData);
+
+        return redirect()->route('admin.transaksi.index')
+            ->with('success', 'Transaksi berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Transaksi $transaksi)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Transaksi $transaksi)
     {
-        //
+        $pelanggans = Pelanggan::with('user')->get();
+        $layanans   = Layanan::all();
+        $treatments = Treatment::all();
+
+        return view('pages.admin.transaksi.edit', compact('transaksi', 'pelanggans', 'layanans', 'treatments'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Transaksi $transaksi)
     {
-        //
+        $validatedData = $request->validate([
+            'pelanggan_id'      => 'required|exists:pelanggans,id',
+            'layanan_id'        => 'required|exists:layanans,id',
+            'treatment_id'      => 'nullable|exists:treatments,id',
+            'berat'             => 'required|numeric|min:1',
+            'metode_pembayaran' => 'required|in:cash,transfer,ewallet',
+            'status'            => 'required|in:pending,proses,selesai',
+            'created_by'        => 'required|in:admin,pelanggan',
+        ]);
+
+        $validatedData['total_harga'] = $this->hitungTotalHarga(
+            $validatedData['layanan_id'],
+            $validatedData['treatment_id'] ?? null,
+            $validatedData['berat']
+        );
+
+        $transaksi->update($validatedData);
+
+        return redirect()->route('admin.transaksi.index')
+            ->with('success', 'Transaksi berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Transaksi $transaksi)
     {
-        //
+        $transaksi->delete();
+        return redirect()->route('admin.transaksi.index')
+            ->with('success', 'Transaksi berhasil dihapus.');
+    }
+
+    private function hitungTotalHarga($layanan_id, $treatment_id, $berat)
+    {
+        $layanan  = Layanan::findOrFail($layanan_id);
+        $treatment = $treatment_id ? Treatment::findOrFail($treatment_id) : null;
+
+        $total_harga = $layanan->harga * $berat;
+
+        if ($treatment) {
+            $total_harga += $treatment->harga;
+            if ($treatment->diskon > 0) {
+                $total_harga -= ($total_harga * ($treatment->diskon / 100));
+            }
+        }
+
+        if ($total_harga >= 100000 && $berat >= 10) {
+            $total_harga -= ($total_harga * 0.1); // diskon 10%
+        }
+
+        return $total_harga;
     }
 }

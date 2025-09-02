@@ -13,13 +13,15 @@ return new class extends Migration
 {
     Schema::create('transaksis', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('pelanggans_id')->constrained('users')->onDelete('cascade');
-        $table->foreignId('layanans_id')->constrained('layanans')->onDelete('cascade');
-        $table->foreignId('treatments_id')->nullable()->constrained('treatments')->onDelete('set null');
+        $table->foreignId('pelanggan_id')->constrained('pelanggans')->onDelete('cascade');
+        $table->foreignId('layanan_id')->constrained('layanans')->onDelete('cascade');
+        $table->foreignId('treatment_id')->nullable()->constrained('treatments')->onDelete('set null');
         $table->integer('berat'); // dalam kg
         $table->decimal('total_harga', 10, 2);
-        $table->enum('metode_pembayaran', ['cash', 'tran sfer', 'ewallet'])->default('cash');
+        $table->enum('metode_pembayaran', ['cash', 'transfer', 'ewallet'])->default('cash');
         $table->enum('status', ['pending', 'proses', 'selesai'])->default('pending');
+        $table->enum('created_by', ['admin', 'pelanggan']);
+
         $table->timestamps();
     });
 }
