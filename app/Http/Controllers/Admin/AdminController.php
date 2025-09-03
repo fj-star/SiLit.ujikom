@@ -32,7 +32,7 @@ class AdminController extends Controller
 
     public function edit(Layanan $layanan)
     {
-        return view('admin.layanan.edit', compact('layanan'));
+        return view('pages.admin.layanan.edit', compact('layanan'));
     }
 
     public function update(Request $request, Layanan $layanan)

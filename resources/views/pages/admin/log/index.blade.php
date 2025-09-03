@@ -10,6 +10,7 @@
                 <th>Aksi</th>
                 <th>Keterangan</th>
                 <th>Waktu</th>
+                <th>&nbsp;</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +20,13 @@
                 <td>{{ $log->aksi }}</td>
                 <td>{{ $log->keterangan }}</td>
                 <td>{{ $log->created_at->format('d-m-Y H:i') }}</td>
+                <td>
+        <form action="{{ route('admin.log-aktivitas.destroy', $log->id) }}" method="POST" onsubmit="return confirm('Yakin hapus log ini?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+        </form>
+    </td>
             </tr>
             @endforeach
         </tbody>

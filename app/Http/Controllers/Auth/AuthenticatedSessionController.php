@@ -42,8 +42,8 @@ class AuthenticatedSessionController extends Controller
 
         // Redirect sesuai role
         return match ($user->role) {
-            'admin'     => redirect()->route('admin.dashboard'),
-            'pelanggan' => redirect()->route('pelanggan.dashboard'),
+            'admin'     => redirect()->route('admin.dashboard')->with('success', 'Halo ' . auth()->user()->name),
+            'pelanggan' => redirect()->route('pelanggan.dashboard')->with('success', 'Halo ' . auth()->user()->name),
             default     => redirect('/'),
         };
     }
@@ -58,6 +58,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/')->with('logout_success', 'Anda berhasil logout, sampai jumpa lagi!');
     }
 }

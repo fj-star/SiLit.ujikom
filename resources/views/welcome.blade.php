@@ -59,3 +59,16 @@
 
 </body>
 </html>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if(session('logout_success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil Logout',
+        text: '{{ session('logout_success') }}',
+        showConfirmButton: false,
+        timer: 2000
+    });
+</script>
+@endif

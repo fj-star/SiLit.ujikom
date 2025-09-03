@@ -1,7 +1,8 @@
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+    <!-- Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-laugh-wink"></i>
         </div>
@@ -9,48 +10,79 @@
     </a>
 
     <hr class="sidebar-divider my-0">
-    
-    <li class="nav-item active">
-        <a class="nav-link" href="{{ route('admin.dashboard') }}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
+
+    <!-- Menu Dinamis -->
+    @php
+        $menu = [
+            [
+                'title' => 'Dashboard',
+                'icon' => 'fas fa-fw fa-tachometer-alt',
+                'route' => route('admin.dashboard'),
+            ],
+            [
+                'title' => 'Components',
+                'icon' => 'fas fa-fw fa-cog',
+                'collapse' => 'collapseComponents',
+                'items' => [
+                    ['name' => 'Buttons', 'url' => '#'],
+                    ['name' => 'Cards', 'url' => '#'],
+                ]
+            ],
+            [
+                'title' => 'Utilities',
+                'icon' => 'fas fa-fw fa-wrench',
+                'collapse' => 'collapseUtilities',
+                'items' => [
+                    ['name' => 'Colors', 'url' => '#'],
+                    ['name' => 'Borders', 'url' => '#'],
+                    ['name' => 'Animations', 'url' => '#'],
+                    ['name' => 'Other', 'url' => '#'],
+                ]
+            ],
+        ];
+    @endphp
+
+    @foreach ($menu as $m)
+        @if(isset($m['items']))
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse"
+                   data-target="#{{ $m['collapse'] }}"
+                   aria-expanded="false"
+                   aria-controls="{{ $m['collapse'] }}">
+                    <i class="{{ $m['icon'] }}"></i>
+                    <span>{{ $m['title'] }}</span>
+                </a>
+                <div id="{{ $m['collapse'] }}" class="collapse"
+                     data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">{{ strtoupper($m['title']) }}:</h6>
+                        @foreach($m['items'] as $item)
+                            <a class="collapse-item" href="{{ $item['url'] }}">{{ $item['name'] }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </li>
+        @else
+            <li class="nav-item">
+                <a class="nav-link" href="{{ $m['route'] }}">
+                    <i class="{{ $m['icon'] }}"></i>
+                    <span>{{ $m['title'] }}</span>
+                </a>
+            </li>
+        @endif
+    @endforeach
 
     <hr class="sidebar-divider">
 
-    <div class="sidebar-heading">Interface</div>
-
+    <!-- Logout -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Components</span>
-        </a>
-        <div id="collapseTwo" class="collapse">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="buttons.html">Buttons</a>
-                <a class="collapse-item" href="cards.html">Cards</a>
-            </div>
-        </div>
+        <form method="POST" action="{{ route('logout') }}" id="logout-form">
+            @csrf
+            <button type="submit" class="nav-link btn btn-link text-white w-100 text-start" id="btn-logout">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </button>
+        </form>
     </li>
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities">
-            <i class="fas fa-fw fa-wrench"></i>
-            <span>Utilities</span>
-        </a>
-        <div id="collapseUtilities" class="collapse">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="utilities-color.html">Colors</a>
-                <a class="collapse-item" href="utilities-border.html">Borders</a>
-                <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                <a class="collapse-item" href="utilities-other.html">Other</a>
-            </div>
-        </div>
-    </li>
-
-    <hr class="sidebar-divider">
-
 </ul>
 <!-- End of Sidebar -->

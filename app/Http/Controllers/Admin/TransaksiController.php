@@ -7,13 +7,18 @@ use App\Models\Transaksi;
 use App\Models\Pelanggan;
 use App\Models\Layanan;
 use App\Models\Treatment;
+use App\Models\LogAktivitas;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksis = Transaksi::with(['pelanggan.user', 'layanan', 'treatment'])->get();
+        $transaksis = Transaksi::with(['pelanggan.user', 'layanan', 'treatment'])
+            ->latest()
+            ->get();
+
         return view('pages.admin.transaksi.index', compact('transaksis'));
     }
 
@@ -45,7 +50,18 @@ class TransaksiController extends Controller
             $validatedData['berat']
         );
 
-        Transaksi::create($validatedData);
+        DB::transaction(function () use ($validatedData) {
+            $transaksi = Transaksi::create($validatedData);
+
+            // Simpan log aktivitas (kalau tabelnya sudah ada)
+            if (class_exists(LogAktivitas::class)) {
+                LogAktivitas::create([
+                    'user_id'    => auth()->id(),
+                    'aksi'       => 'Tambah Transaksi',
+                    'keterangan' => 'Transaksi ID: ' . $transaksi->id,
+                ]);
+            }
+        });
 
         return redirect()->route('admin.transaksi.index')
             ->with('success', 'Transaksi berhasil ditambahkan.');
@@ -78,7 +94,17 @@ class TransaksiController extends Controller
             $validatedData['berat']
         );
 
-        $transaksi->update($validatedData);
+        DB::transaction(function () use ($transaksi, $validatedData) {
+            $transaksi->update($validatedData);
+
+            if (class_exists(LogAktivitas::class)) {
+                LogAktivitas::create([
+                    'user_id'    => auth()->id(),
+                    'aksi'       => 'Update Transaksi',
+                    'keterangan' => 'Transaksi ID: ' . $transaksi->id,
+                ]);
+            }
+        });
 
         return redirect()->route('admin.transaksi.index')
             ->with('success', 'Transaksi berhasil diperbarui.');
@@ -86,14 +112,25 @@ class TransaksiController extends Controller
 
     public function destroy(Transaksi $transaksi)
     {
-        $transaksi->delete();
+        DB::transaction(function () use ($transaksi) {
+            $transaksi->delete();
+
+            if (class_exists(LogAktivitas::class)) {
+                LogAktivitas::create([
+                    'user_id'    => auth()->id(),
+                    'aksi'       => 'Hapus Transaksi',
+                    'keterangan' => 'Transaksi ID: ' . $transaksi->id,
+                ]);
+            }
+        });
+
         return redirect()->route('admin.transaksi.index')
             ->with('success', 'Transaksi berhasil dihapus.');
     }
 
     private function hitungTotalHarga($layanan_id, $treatment_id, $berat)
     {
-        $layanan  = Layanan::findOrFail($layanan_id);
+        $layanan   = Layanan::findOrFail($layanan_id);
         $treatment = $treatment_id ? Treatment::findOrFail($treatment_id) : null;
 
         $total_harga = $layanan->harga * $berat;
@@ -105,8 +142,9 @@ class TransaksiController extends Controller
             }
         }
 
+        // Diskon tambahan kalau >= 10kg dan total >= 100rb
         if ($total_harga >= 100000 && $berat >= 10) {
-            $total_harga -= ($total_harga * 0.1); // diskon 10%
+            $total_harga -= ($total_harga * 0.1);
         }
 
         return $total_harga;
