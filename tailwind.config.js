@@ -14,6 +14,17 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            // Tambahkan konfigurasi animasi di sini
+            animation: {
+                'gradient-flow': 'gradientFlow 8s ease infinite',
+            },
+            keyframes: {
+                gradientFlow: {
+                    '0%': { backgroundPosition: '0% 50%' },
+                    '50%': { backgroundPosition: '100% 50%' },
+                    '100%': { backgroundPosition: '0% 50%' },
+                },
+            },
         },
     },
 

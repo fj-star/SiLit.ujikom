@@ -10,6 +10,7 @@ use App\Models\Treatment;
 use App\Models\LogAktivitas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class TransaksiController extends Controller
 {
@@ -50,10 +51,14 @@ class TransaksiController extends Controller
             $validatedData['berat']
         );
 
+        // Tambah tanggal otomatis kalau kolom ada
+        if (Schema::hasColumn('transaksis', 'tanggal')) {
+            $validatedData['tanggal'] = now();
+        }
+
         DB::transaction(function () use ($validatedData) {
             $transaksi = Transaksi::create($validatedData);
 
-            // Simpan log aktivitas (kalau tabelnya sudah ada)
             if (class_exists(LogAktivitas::class)) {
                 LogAktivitas::create([
                     'user_id'    => auth()->id(),
@@ -93,6 +98,10 @@ class TransaksiController extends Controller
             $validatedData['treatment_id'] ?? null,
             $validatedData['berat']
         );
+
+        if (Schema::hasColumn('transaksis', 'tanggal')) {
+            $validatedData['tanggal'] = now();
+        }
 
         DB::transaction(function () use ($transaksi, $validatedData) {
             $transaksi->update($validatedData);

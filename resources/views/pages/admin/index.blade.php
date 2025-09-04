@@ -3,7 +3,14 @@
 
 @section('content')
 <h1 class="h3 mb-4 text-gray-800">Dashboard Admin</h1>
-
+@push('styles')
+<style>
+    .fade-in { opacity: 0; transform: translateY(15px); animation: fadeInUp .5s forwards ease-in-out; }
+    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+    .card { border-radius: 15px; transition: transform .25s, box-shadow .25s; }
+    .card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,.12); }
+</style>
+@endpush
 <div class="row">
     {{-- Jumlah Pesanan --}}
     <div class="col-md-4 mb-4">
@@ -157,14 +164,7 @@
 </div>
 @endsection
 
-@push('styles')
-<style>
-    .fade-in { opacity: 0; transform: translateY(15px); animation: fadeInUp .5s forwards ease-in-out; }
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-    .card { border-radius: 15px; transition: transform .25s, box-shadow .25s; }
-    .card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,.12); }
-</style>
-@endpush
+
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -193,7 +193,6 @@
         }
     });
 </script>
-@endpush
 
 @if(session('success'))
 <script>
@@ -206,3 +205,6 @@
     })
 </script>
 @endif
+@endpush
+
+

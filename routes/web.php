@@ -3,13 +3,14 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\LayananController;
 use App\Http\Controllers\Admin\LogAktivitasController;
 use App\Http\Controllers\Admin\PelangganController;
 use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\TreatmentController;
 
-Route::get('/', function () {
+Route::get('/landing.page', function () {
     return view('welcome');
 });
 
@@ -33,6 +34,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     Route::resource('treatments', TreatmentController::class);
     Route::resource('transaksi', TransaksiController::class);
     Route::resource('log-aktivitas', LogAktivitasController::class)->only(['index', 'destroy']);
+Route::resource('laporan', LaporanController::class)->only(['index', 'destroy']);
+Route::get('/laporan/cetak', [LaporanController::class, 'cetakPdf'])->name('admin.laporan.cetak.pdf');
+
 });
 
 // pelanggan

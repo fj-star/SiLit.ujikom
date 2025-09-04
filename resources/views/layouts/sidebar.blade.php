@@ -24,7 +24,7 @@
                 'icon' => 'fas fa-fw fa-cog',
                 'collapse' => 'collapseComponents',
                 'items' => [
-                    ['name' => 'Buttons', 'url' => '#'],
+                    ['name' => 'Laporan', 'url' => route('admin.laporan.index')],
                     ['name' => 'Cards', 'url' => '#'],
                 ]
             ],

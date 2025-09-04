@@ -37,9 +37,9 @@
                 <td>{{ ucfirst($transaksi->metode_pembayaran) }}</td>
                 <td>
                     <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}" method="POST" style="display:inline;">
+                    <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}" method="POST" class="d-inline delete-form">
                         @csrf @method('DELETE')
-                        <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus transaksi ini?')">Hapus</button>
+                        <button class="btn btn-danger btn-sm ">Hapus</button>
                     </form>
                 </td>
             </tr>
