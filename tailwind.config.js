@@ -5,8 +5,8 @@ import forms from '@tailwindcss/forms';
 export default {
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './resources/js/**/*.js', // Opsional: Tambahkan ini jika Anda memiliki file JS dengan kelas Tailwind
     ],
 
     theme: {
@@ -14,7 +14,7 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
-            // Tambahkan konfigurasi animasi di sini
+            // Konfigurasi animasi di sini
             animation: {
                 'gradient-flow': 'gradientFlow 8s ease infinite',
             },

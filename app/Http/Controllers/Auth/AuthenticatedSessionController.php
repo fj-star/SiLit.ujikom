@@ -60,4 +60,5 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/login')->with('logout_success', 'Anda berhasil logout, sampai jumpa lagi!');
     }
+    
 }
