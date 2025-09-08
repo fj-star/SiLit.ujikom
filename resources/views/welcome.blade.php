@@ -29,6 +29,9 @@
         </marquee>
             <a href="#cta" class="button">Dapatkan Sekarang Juga!</a>
         </div>
+          <!-- Tombol -->
+  <button onclick="prevSlide()" class="btn-left">⟵</button>
+  <button onclick="nextSlide()" class="btn-right">⟶</button>
     </section>
 
     <section id="features" class="features">
@@ -92,18 +95,21 @@
   const images = [
     "{{ asset('assets/img/slide1.jpg') }}",
     "{{ asset('assets/img/slide2.jpg') }}",
-    "{{ asset('assets/images/slide3.jpg') }}"
+    "{{ asset('assets/img/slide3.jpg') }}"
   ];
 
   let index = 0;
   function changeBackground() {
     hero.style.backgroundImage = `url(${images[index]})`;
-    index = (index + 1) % images.length;
+   index = (index + 1) % images.length;
+
   }
 
   changeBackground();
   setInterval(changeBackground, 5000); // ganti setiap 5 detik
 </script>
+
+
 
 </body>
 </html>

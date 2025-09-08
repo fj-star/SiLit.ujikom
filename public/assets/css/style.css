@@ -231,7 +231,7 @@ section {
       color: white;
       background-size: cover;
       background-position: center;
-      transition: background-image 1s ease-in-out;
+      transition: transform 1s ease-in-out;
     }
 
     .hero .container {
@@ -260,3 +260,22 @@ section {
       background: #007BFF;
       color: white;
     }
+
+     /* Tombol navigasi */
+  .btn-left, .btn-right {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 20px;
+    z-index: 10;
+    border-radius: 50%;
+  }
+  .btn-left { left: 20px; }
+  .btn-right { right: 20px; }
+    
+  
