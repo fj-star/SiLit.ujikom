@@ -10,7 +10,7 @@
 
     <header class="header" >
         <div class="container">
-            <h1 class="logo">Nama Brand</h1>
+            <h1 class="logo">SILIT LAUNDRY</h1>
             <nav class="nav">
                 <a href="#features">Fitur</a>
                 <a href="#testimonials">Testimoni</a>
@@ -21,22 +21,32 @@
         </div>
     </header>
 
-    <section class="hero" id="hero">
-        <div class="container">
-    
-            <h2>Solusi Terbaik untuk Kebutuhan Anda</h2>
-                    <marquee behavior="" direction=""><p>Jelajahi produk atau layanan kami yang akan mengubah cara Anda bekerja dan menjalani hidup. Dapatkan hasil yang lebih cepat, lebih baik, dan lebih mudah.</p>
-        </marquee>
-            <a href="#cta" class="button">Dapatkan Sekarang Juga!</a>
-        </div>
-          <!-- Tombol -->
-  <button onclick="prevSlide()" class="btn-left">⟵</button>
+    <section class="slider" id="slide">
+
+       <div class="slider-container">
+         <button onclick="prevSlide()" class="btn-left">⟵</button>
+
   <button onclick="nextSlide()" class="btn-right">⟶</button>
+  <div class="slider" id="slider">
+    <div class="slide" style="background-image: url('{{ asset('assets/img/slide1.webp') }}')"></div>
+    <div class="slide" style="background-image: url('{{ asset('assets/img/slide2.webp') }}')">
+
+          <h2>Solusi Terbaik untuk Kebutuhan Anda</h2>
+        
+        <p class="bottom">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo minus rerum iste eligendi mollitia cum veritatis quas iure deleniti doloremque. Cumque libero dolore voluptatem veritatis est animi rem harum ad.</p>
+            <a href="#cta" class="button">Dapatkan Sekarang Juga!</a>
+    </div>
+    <div class="slide" style="background-image: url('{{ asset('assets/img/tim7.webp') }}')"></div>
+
+     <!-- Tombol -->
+ 
+  </div>
+
     </section>
 
     <section id="features" class="features">
         <div class="container">
-            <h3>Mengapa Memilih Kami?</h3>
+            <h2>Mengapa Memilih Kami?</h2>
             <div class="feature-grid">
                 <div class="feature-item">
                     <h4>Fitur 1</h4>
@@ -90,7 +100,7 @@
             </div>
         </div>
     </footer>
-<script>
+<!-- <script>
   const hero = document.getElementById('hero');
   const images = [
     "{{ asset('assets/img/slide1.jpg') }}",
@@ -107,6 +117,30 @@
 
   changeBackground();
   setInterval(changeBackground, 5000); // ganti setiap 5 detik
+</script> -->
+
+
+  <script>
+  const slider = document.getElementById("slider");
+  const slides = document.querySelectorAll(".slide");
+  let index = 0;
+
+  function showSlide() {
+    slider.style.transform = `translateX(-${index * 100}%)`;
+  }
+
+  function nextSlide() {
+    index = (index + 1) % slides.length;
+    showSlide();
+  }
+
+  function prevSlide() {
+    index = (index - 1 + slides.length) % slides.length;
+    showSlide();
+  }
+
+  // auto geser kanan tiap 5 detik
+  setInterval(nextSlide, 5000);
 </script>
 
 
