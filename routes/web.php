@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\TreatmentController;
 use App\Http\Controllers\Pelanggan\PelangganController as UserPelangganController;
 use App\Http\Controllers\Pelanggan\TransaksiController as UserTransaksiController;
 
-Route::get('/landing.page', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 
