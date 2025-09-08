@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <header class="header">
+    <header class="header" >
         <div class="container">
             <h1 class="logo">Nama Brand</h1>
             <nav class="nav">
@@ -21,10 +21,12 @@
         </div>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="container">
+    
             <h2>Solusi Terbaik untuk Kebutuhan Anda</h2>
-            <p>Jelajahi produk atau layanan kami yang akan mengubah cara Anda bekerja dan menjalani hidup. Dapatkan hasil yang lebih cepat, lebih baik, dan lebih mudah.</p>
+                    <marquee behavior="" direction=""><p>Jelajahi produk atau layanan kami yang akan mengubah cara Anda bekerja dan menjalani hidup. Dapatkan hasil yang lebih cepat, lebih baik, dan lebih mudah.</p>
+        </marquee>
             <a href="#cta" class="button">Dapatkan Sekarang Juga!</a>
         </div>
     </section>
@@ -85,6 +87,24 @@
             </div>
         </div>
     </footer>
+<script>
+  const hero = document.getElementById('hero');
+  const images = [
+    "{{ asset('assets/img/slide1.jpg') }}",
+    "{{ asset('assets/img/slide2.jpg') }}",
+    "{{ asset('assets/images/slide3.jpg') }}"
+  ];
+
+  let index = 0;
+  function changeBackground() {
+    hero.style.backgroundImage = `url(${images[index]})`;
+    index = (index + 1) % images.length;
+  }
+
+  changeBackground();
+  setInterval(changeBackground, 5000); // ganti setiap 5 detik
+</script>
 
 </body>
 </html>
+

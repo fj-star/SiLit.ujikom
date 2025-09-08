@@ -220,3 +220,43 @@ section {
 .nav-link {
     margin-left: 1rem;
 }
+
+ .hero {
+      position: relative;
+      height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 1s ease-in-out;
+    }
+
+    .hero .container {
+      z-index: 2;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: white;
+      color: #007BFF;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+    .button:hover {
+      background: #007BFF;
+      color: white;
+    }
