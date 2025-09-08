@@ -6,6 +6,8 @@
     <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
+
 <body class="bg-gray-100 flex justify-center items-center min-h-screen">
 
     <div class="bg-white rounded-xl shadow-lg w-[800px] grid grid-cols-2 overflow-hidden">
@@ -60,8 +62,18 @@
         </div>
 
         <!-- Bagian Kanan -->
-        <div class="bg-blue-500"></div>
-
+        <div class="bg-blue-500">
+            @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>- {{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+        </div>
+        
     </div>
 
 </body>
@@ -79,6 +91,8 @@
     });
 </script>
 @endif
+
+
 
        
 
