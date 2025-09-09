@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Transaksi;
-use App\Models\Pelanggan;
+use App\Models\User;
 use App\Models\Layanan;
 use App\Models\Treatment;
 use App\Models\LogAktivitas;
@@ -16,32 +15,30 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        $transaksis = Transaksi::with(['pelanggan.user', 'layanan', 'treatment'])
+        $transaksis = Transaksi::with(['user', 'layanan', 'treatment'])
             ->latest()
             ->get();
-
         return view('pages.admin.transaksi.index', compact('transaksis'));
     }
 
     public function create()
     {
-        $pelanggans = Pelanggan::with('user')->get();
-        $layanans   = Layanan::all();
+        // Mengambil user dengan role pelanggan
+        $pelanggans = User::where('role', 'pelanggan')->get();
+        $layanans = Layanan::all();
         $treatments = Treatment::all();
-
         return view('pages.admin.transaksi.create', compact('pelanggans', 'layanans', 'treatments'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'pelanggan_id'      => 'required|exists:pelanggans,id',
-            'layanan_id'        => 'required|exists:layanans,id',
-            'treatment_id'      => 'nullable|exists:treatments,id',
-            'berat'             => 'required|numeric|min:1',
+            'user_id' => 'required|exists:users,id',
+            'layanan_id' => 'required|exists:layanans,id',
+            'treatment_id' => 'nullable|exists:treatments,id',
+            'berat' => 'required|numeric|min:0.1',
             'metode_pembayaran' => 'required|in:cash,transfer,ewallet',
-            'status'            => 'required|in:pending,proses,selesai',
-            'created_by'        => 'required|in:admin,pelanggan',
+            'status' => 'required|in:pending,proses,selesai',
         ]);
 
         // Hitung total harga
@@ -51,6 +48,11 @@ class TransaksiController extends Controller
             $validatedData['berat']
         );
 
+        // Tambah created_by otomatis
+        if (Schema::hasColumn('transaksis', 'created_by')) {
+            $validatedData['created_by'] = 'admin';
+        }
+
         // Tambah tanggal otomatis kalau kolom ada
         if (Schema::hasColumn('transaksis', 'tanggal')) {
             $validatedData['tanggal'] = now();
@@ -58,11 +60,11 @@ class TransaksiController extends Controller
 
         DB::transaction(function () use ($validatedData) {
             $transaksi = Transaksi::create($validatedData);
-
+            
             if (class_exists(LogAktivitas::class)) {
                 LogAktivitas::create([
-                    'user_id'    => auth()->id(),
-                    'aksi'       => 'Tambah Transaksi',
+                    'user_id' => auth()->id(),
+                    'aksi' => 'Tambah Transaksi',
                     'keterangan' => 'Transaksi ID: ' . $transaksi->id,
                 ]);
             }
@@ -74,23 +76,22 @@ class TransaksiController extends Controller
 
     public function edit(Transaksi $transaksi)
     {
-        $pelanggans = Pelanggan::with('user')->get();
-        $layanans   = Layanan::all();
+        // Mengambil user dengan role pelanggan
+        $pelanggans = User::where('role', 'pelanggan')->get();
+        $layanans = Layanan::all();
         $treatments = Treatment::all();
-
         return view('pages.admin.transaksi.edit', compact('transaksi', 'pelanggans', 'layanans', 'treatments'));
     }
 
     public function update(Request $request, Transaksi $transaksi)
     {
         $validatedData = $request->validate([
-            'pelanggan_id'      => 'required|exists:pelanggans,id',
-            'layanan_id'        => 'required|exists:layanans,id',
-            'treatment_id'      => 'nullable|exists:treatments,id',
-            'berat'             => 'required|numeric|min:1',
+            'user_id' => 'required|exists:users,id',
+            'layanan_id' => 'required|exists:layanans,id',
+            'treatment_id' => 'nullable|exists:treatments,id',
+            'berat' => 'required|numeric|min:0.1',
             'metode_pembayaran' => 'required|in:cash,transfer,ewallet',
-            'status'            => 'required|in:pending,proses,selesai',
-            'created_by'        => 'required|in:admin,pelanggan',
+            'status' => 'required|in:pending,proses,selesai',
         ]);
 
         $validatedData['total_harga'] = $this->hitungTotalHarga(
@@ -99,17 +100,22 @@ class TransaksiController extends Controller
             $validatedData['berat']
         );
 
+        // Update created_by jika kolom ada
+        if (Schema::hasColumn('transaksis', 'created_by')) {
+            $validatedData['created_by'] = 'admin';
+        }
+
         if (Schema::hasColumn('transaksis', 'tanggal')) {
             $validatedData['tanggal'] = now();
         }
 
         DB::transaction(function () use ($transaksi, $validatedData) {
             $transaksi->update($validatedData);
-
+            
             if (class_exists(LogAktivitas::class)) {
                 LogAktivitas::create([
-                    'user_id'    => auth()->id(),
-                    'aksi'       => 'Update Transaksi',
+                    'user_id' => auth()->id(),
+                    'aksi' => 'Update Transaksi',
                     'keterangan' => 'Transaksi ID: ' . $transaksi->id,
                 ]);
             }
@@ -123,11 +129,11 @@ class TransaksiController extends Controller
     {
         DB::transaction(function () use ($transaksi) {
             $transaksi->delete();
-
+            
             if (class_exists(LogAktivitas::class)) {
                 LogAktivitas::create([
-                    'user_id'    => auth()->id(),
-                    'aksi'       => 'Hapus Transaksi',
+                    'user_id' => auth()->id(),
+                    'aksi' => 'Hapus Transaksi',
                     'keterangan' => 'Transaksi ID: ' . $transaksi->id,
                 ]);
             }
@@ -139,23 +145,24 @@ class TransaksiController extends Controller
 
     private function hitungTotalHarga($layanan_id, $treatment_id, $berat)
     {
-        $layanan   = Layanan::findOrFail($layanan_id);
+        $layanan = Layanan::findOrFail($layanan_id);
         $treatment = $treatment_id ? Treatment::findOrFail($treatment_id) : null;
-
+        
         $total_harga = $layanan->harga * $berat;
-
+        
         if ($treatment) {
             $total_harga += $treatment->harga;
+            
             if ($treatment->diskon > 0) {
                 $total_harga -= ($total_harga * ($treatment->diskon / 100));
             }
         }
-
+        
         // Diskon tambahan kalau >= 10kg dan total >= 100rb
         if ($total_harga >= 100000 && $berat >= 10) {
             $total_harga -= ($total_harga * 0.1);
         }
-
-        return $total_harga;
+        
+        return round($total_harga, 2);
     }
 }

@@ -1,124 +1,251 @@
 @extends('layouts.main')
-@section('title', 'Dashboard Pelanggan')
-
 @section('content')
-<h1 class="h3 mb-4 text-gray-800">Dashboard Pelanggan</h1>
-
-@push('styles')
-<style>
-    .fade-in { opacity: 0; transform: translateY(15px); animation: fadeInUp .5s forwards ease-in-out; }
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-    .card { border-radius: 15px; transition: transform .25s, box-shadow .25s; }
-    .card:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,.12); }
-</style>
-@endpush
-
-<div class="row">
-    {{-- Total Transaksi --}}
-    <div class="col-md-4 mb-4">
-        <div class="card shadow h-100 fade-in text-center p-3">
-            <div class="mb-3 text-primary"><i class="fas fa-receipt fa-2x"></i></div>
-            <h5 class="card-title mb-2">Total Transaksi</h5>
-            <h2 class="mb-1">{{ $totalTransaksi ?? 0 }}</h2>
-            <p class="text-muted">Jumlah semua transaksi Anda.</p>
-            <a href="{{ route('pelanggan.transaksi.index') }}" class="btn btn-sm btn-primary">Pesan Lagi</a>
-        </div>
+<div class="container-fluid px-4">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Dashboard Pelanggan</h1>
+        <a href="{{ route('pelanggan.transaksi.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-plus fa-sm text-white-50"></i> Buat Transaksi Baru
+        </a>
     </div>
 
-    {{-- Total Pengeluaran --}}
-    <div class="col-md-4 mb-4">
-        <div class="card shadow h-100 fade-in text-center p-3">
-            <div class="mb-3 text-success"><i class="fas fa-wallet fa-2x"></i></div>
-            <h5 class="card-title mb-2">Total Pengeluaran</h5>
-            <h2 class="mb-1">Rp {{ number_format($totalOmzet ?? 0, 0, ',', '.') }}</h2>
-            <p class="text-muted">Total biaya semua transaksi Anda.</p>
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Total Transaksi Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Transaksi</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $totalTransaksi }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-receipt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    {{-- Transaksi Terakhir --}}
-    <div class="col-md-4 mb-4">
-        <div class="card shadow h-100 fade-in text-center p-3">
-            <div class="mb-3 text-warning"><i class="fas fa-history fa-2x"></i></div>
-            <h5 class="card-title mb-2">Transaksi Terakhir</h5>
-            <h2 class="mb-1">{{ $lastTransactionDate ?? '-' }}</h2>
-            <p class="text-muted">Tanggal transaksi terakhir Anda.</p>
+        <!-- Total Pengeluaran Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Pengeluaran</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-wallet fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
-{{-- Grafik & Transaksi Terbaru --}}
-<div class="row">
-    {{-- Grafik Transaksi --}}
-    <div class="col-md-7 mb-4">
-        <div class="card shadow p-3 h-100">
-            <h5 class="mb-3">Grafik Transaksi per Bulan ({{ now()->year }})</h5>
-            <div style="height: 350px;">
-                <canvas id="transactionsChart"></canvas>
+        <!-- Transaksi Terakhir Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Transaksi Terakhir</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @if($transaksiTerakhir)
+                                    {{ $transaksiTerakhir->created_at->format('d M Y') }}
+                                @else
+                                    -
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Transaksi Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Status Terakhir</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @if($transaksiTerakhir)
+                                    <span class="badge badge-{{ $transaksiTerakhir->status == 'pending' ? 'warning' : ($transaksiTerakhir->status == 'proses' ? 'info' : 'success') }}">
+                                        {{ ucfirst($transaksiTerakhir->status) }}
+                                    </span>
+                                @else
+                                    <span class="badge badge-secondary">Belum ada transaksi</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-info-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    {{-- Transaksi Terbaru --}}
-    <div class="col-md-5 mb-4">
-        <div class="card shadow p-3 h-100">
-            <h5 class="mb-3">Histori Transaksi Terbaru</h5>
-            <div class="table-responsive">
-                <table class="table table-sm table-striped mb-0">
-                    <thead>
-                        <tr>
-                            <th>Tanggal</th>
-                            <th>Layanan</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{-- @forelse($data as $t) --}}
-                        {{-- <tr>
-                            <td>{{ $t->created_at->format('d M Y') }}</td>
-                            <td>{{ $t->layanan->nama_layanan ?? '-' }}</td>
-                            <td>Rp {{ number_format((float)$t->total_harga, 0, ',', '.') }}</td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="3" class="text-center text-muted">Belum ada transaksi.</td>
-                        </tr>
-                        @endforelse --}}
-                    </tbody>
-                </table>
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Riwayat Transaksi -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Riwayat Transaksi</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{{ route('pelanggan.transaksi.index') }}">Lihat Semua</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ route('pelanggan.transaksi.create') }}">Tambah Baru</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if($transaksis->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Layanan</th>
+                                        <th>Berat</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Tanggal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($transaksis->take(5) as $transaksi)
+                                        <tr>
+                                            <td>INV{{ str_pad($transaksi->id, 4, '0', STR_PAD_LEFT) }}</td>
+                                            <td>{{ $transaksi->layanan->nama_layanan }}</td>
+                                            <td>{{ $transaksi->berat }} kg</td>
+                                            <td>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
+                                            <td>
+                                                <span class="badge badge-{{ $transaksi->status == 'pending' ? 'warning' : ($transaksi->status == 'proses' ? 'info' : 'success') }}">
+                                                    {{ ucfirst($transaksi->status) }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $transaksi->created_at->format('d M Y') }}</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <a href="{{ route('pelanggan.transaksi.show', $transaksi->id) }}" class="btn btn-sm btn-info" data-toggle="tooltip" title="Detail">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    @if($transaksi->status == 'pending')
+                                                        <form action="{{ route('pelanggan.transaksi.destroy', $transaksi->id) }}" method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus" onclick="return confirm('Yakin ingin menghapus transaksi ini?')">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-3 text-center">
+                            <a href="{{ route('pelanggan.transaksi.index') }}" class="btn btn-primary">Lihat Semua Transaksi</a>
+                        </div>
+                    @else
+                        <div class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-gray-300 mb-3"></i>
+                            <p class="text-gray-500">Belum ada riwayat transaksi</p>
+                            <a href="{{ route('pelanggan.transaksi.create') }}" class="btn btn-primary">Buat Transaksi Baru</a>
+                        </div>
+                    @endif
+                </div>
             </div>
-            <div class="text-end mt-2">
-            <a href="{{ route('pelanggan.transaksi.index') }}" class="btn btn-sm btn-outline-primary">Pesan Lagi</a>
+        </div>
+
+        <!-- Informasi Tambahan -->
+        <div class="col-xl-4 col-lg-5">
+            <!-- Card Layanan Populer -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Layanan Tersedia</h6>
+                </div>
+                <div class="card-body">
+                    @if(isset($layanans) && $layanans->count() > 0)
+                        <div class="list-group">
+                            @foreach($layanans->take(3) as $layanan)
+                                <a href="{{ route('pelanggan.transaksi.create') }}" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ $layanan->nama_layanan }}</h6>
+                                        <small>Rp {{ number_format($layanan->harga, 0, ',', '.') }}/kg</small>
+                                    </div>
+                                    <p class="mb-1 small text-muted">{{ Str::limit($layanan->deskripsi, 50) }}</p>
+                                </a>
+                            @endforeach
+                        </div>
+                        <div class="mt-3 text-center">
+                            <a href="{{ route('pelanggan.transaksi.create') }}" class="btn btn-sm btn-outline-primary">Lihat Semua Layanan</a>
+                        </div>
+                    @else
+                        <p class="text-center text-gray-500">Belum ada layanan tersedia</p>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Card Tips -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Tips Laundry</h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb"></i> <strong>Diskon 10%</strong> untuk transaksi dengan berat minimal 10kg dan total harga minimal Rp100.000.
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i> Pastikan status transaksi sudah <strong>Selesai</strong> sebelum mengambil laundry Anda.
+                    </div>
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> Anda dapat membatalkan transaksi selama status masih <strong>Pending</strong>.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
 
-@push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@section('scripts')
 <script>
-    const ctx = document.getElementById('transactionsChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: @json($chartLabels ?? []),
-            datasets: [{
-                label: 'Jumlah Transaksi',
-                data: @json($chartData ?? []),
-                tension: 0.35,
-                fill: true,
-                backgroundColor: 'rgba(78, 115, 223, 0.15)',
-                borderColor: 'rgba(78, 115, 223, 1)',
-                borderWidth: 2,
-                pointBackgroundColor: 'rgba(78, 115, 223, 1)',
-                pointRadius: 4
-            }]
-        },
-        options: {
+    $(document).ready(function() {
+        // Initialize tooltips
+        $('[data-toggle="tooltip"]').tooltip();
+        
+        // Initialize DataTable if there are transactions
+        @if($transaksis->count() > 0)
+        $('#dataTable').DataTable({
             responsive: true,
-            maintainAspectRatio: false,
-            scales: { y: { beginAtZero: true, ticks: { precision: 0, stepSize: 1 } } }
-        }
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.4/i18n/id.json"
+            },
+            dom: '<"row"<"col-sm-6"l><"col-sm-6"f>>' +
+                 '<"row"<"col-sm-12"tr>>' +
+                 '<"row"<"col-sm-5"i><"col-sm-7"p>>',
+            pageLength: 5,
+            lengthMenu: [[5, 10, 25, -1], [5, 10, 25, "Semua"]]
+        });
+        @endif
     });
 </script>
-@endpush
+@endsection
