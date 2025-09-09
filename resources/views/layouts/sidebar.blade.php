@@ -4,8 +4,8 @@
     <!-- Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" 
        href="{{ auth()->user()->role == 'admin' ? route('admin.dashboard') : route('pelanggan.dashboard') }}">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+        <div class="sidebar-brand-icon">
+            <img src="{{ asset('assets/img/logo.jpg') }}" alt="E-Laundry Logo" style="width: 30px; height: 30px; object-fit: cover; border-radius: 50%;">
         </div>
         <div class="sidebar-brand-text mx-3">E-Laundry</div>
     </a>
