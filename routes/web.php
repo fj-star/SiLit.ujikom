@@ -1,8 +1,6 @@
 <?php
-
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LaporanController;
@@ -11,12 +9,12 @@ use App\Http\Controllers\Admin\LogAktivitasController;
 use App\Http\Controllers\Admin\PelangganController as AdminPelangganController;
 use App\Http\Controllers\Admin\TransaksiController as AdminTransaksiController;
 use App\Http\Controllers\Admin\TreatmentController;
-
 // Pelanggan Controllers
+use App\Http\Controllers\Pelanggan\DashboardController as PelangganDashboardController; // Alias untuk dashboard pelanggan
 use App\Http\Controllers\Pelanggan\PelangganController as UserPelangganController;
 use App\Http\Controllers\Pelanggan\TransaksiController as UserTransaksiController;
 
-Route::get('/landing.page', function () {
+Route::get('/', function () {
     return view('welcome');
 });
 
@@ -34,7 +32,6 @@ Route::middleware('auth')->group(function () {
 // ================== ADMIN ==================
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
     Route::resource('pelanggans', AdminPelangganController::class);
     Route::resource('layanans', LayananController::class);
     Route::resource('treatments', TreatmentController::class);
@@ -46,8 +43,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
 
 // ================== PELANGGAN ==================
 Route::prefix('pelanggan')->name('pelanggan.')->middleware(['auth', 'role:pelanggan'])->group(function () {
-    Route::get('/dashboard', [UserPelangganController::class, 'index'])->name('dashboard');
-
+    // Gunakan alias PelangganDashboardController
+    Route::get('/dashboard', [PelangganDashboardController::class, 'index'])->name('dashboard');
     // histori transaksi pelanggan
     Route::resource('transaksi', UserTransaksiController::class);
 });

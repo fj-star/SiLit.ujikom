@@ -4,41 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Pelanggan;
-use App\Models\Layanan;
-use App\Models\Treatment;
 
 class Transaksi extends Model
 {
     use HasFactory;
-
+    
     protected $fillable = [
-        'pelanggan_id',
-        'layanan_id',
-        'treatment_id',
-        'berat',
-        'total_harga',
-        'metode_pembayaran',
+        'user_id', 
+        'layanan_id', 
+        'treatment_id', 
+        'berat', 
+        'total_harga', 
         'status',
-        'created_by',
+        'metode_pembayaran',
+        'created_by'
     ];
-
-    public function pelanggan()
+    
+    public function user()
     {
-        return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
+        return $this->belongsTo(User::class);
     }
-
+    
     public function layanan()
     {
-        return $this->belongsTo(Layanan::class, 'layanan_id');
+        return $this->belongsTo(Layanan::class);
     }
-
+    
     public function treatment()
     {
-        return $this->belongsTo(Treatment::class, 'treatment_id');
+        return $this->belongsTo(Treatment::class);
     }
-//     public function logAktivitas()
-// {
-//     return $this->hasMany(LogAktivitas::class);
-// }
 }
