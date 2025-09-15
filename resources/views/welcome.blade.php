@@ -3,214 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nama Produk Anda - Landing Page Keren</title>
-    <link rel="stylesheet" href="{{ asset ('assets/css/style.css') }}">
+    <title>Silit Laundry - Solusi Kebersihan Pakaian Anda</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <header class="header" >
+    <header class="header">
         <div class="container">
             <h1 class="logo">
-             <img src="assets/img/logo.jpg" style="height:50px; vertical-align:middle; margin-right:10px;">    
-            SILIT LAUNDRY</h1>
+                <img src="assets/img/logo.jpg" alt="Logo Silit Laundry"> Silit Laundry
+            </h1>
             <nav class="nav">
-                <a href="#features">Tentang Kami</a>
-                <a href="#testimonials">Testimoni</a>
-                <a href="#contact">Kontak</a>
-                <a href="{{ route('login') }}" class="footer-link">Login</a>  
-                {{-- <a href="{{ route('register') }}" class="footer-link">Register</a> --}}
+                <a href="#about" class="nav-link">Tentang Kami</a>
+                <a href="#services" class="nav-link">Layanan</a>
+                <a href="#testimonials" class="nav-link">Testimoni</a>
+                <a href="#contact" class="nav-link">Kontak</a>
+                <a href="{{ route('login') }}" class="button nav-link login-button">Login</a> 
             </nav>
         </div>
     </header>
 
-    <section class="slider" id="slide">
-
-       <div class="slider-container">
-         <button onclick="prevSlide()" class="btn-left">⟵</button>
-
-  <button onclick="nextSlide()" class="btn-right">⟶</button>
-  <div class="slider" id="slider">
-    <div class="slide" style="background-image: url('{{ asset('assets/img/slide1.webp') }}')"></div>
-    <div class="slide" style="background-image: url('{{ asset('assets/img/slide2.webp') }}')">
-
-          <h2>Solusi Terbaik untuk Kebutuhan Anda</h2>
-        
-        <p class="bottom">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo minus rerum iste eligendi mollitia cum veritatis quas iure deleniti doloremque. Cumque libero dolore voluptatem veritatis est animi rem harum ad.</p>
-            <a href="#cta" class="button">Dapatkan Sekarang Juga!</a>
-    </div>
-    <div class="slide" style="background-image: url('{{ asset('assets/img/tim7.webp') }}')"></div>
-
-     <!-- Tombol -->
- 
-  </div>
-
+    <section class="hero-slider">
+        <div class="slider-container">
+            <div class="slider" id="slider">
+                <div class="slide" style="background-image: url('assets/img/slide1.webp')">
+                    <div class="slide-content">
+                        <h2>Solusi Laundry Profesional</h2>
+                        <p>Kami hadir untuk memberikan solusi kebersihan pakaian terbaik dengan teknologi modern dan pelayanan ramah.</p>
+                        <a href="#cta" class="button">Pelajari Lebih Lanjut</a>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('assets/img/slide2.webp')">
+                    <div class="slide-content">
+                        <h2>Layanan Antar Jemput Gratis</h2>
+                        <p>Nikmati kemudahan layanan antar jemput gratis, agar Anda bisa lebih fokus pada hal penting lainnya.</p>
+                        <a href="{{ route('register') }}" class="button">Daftar Sekarang!</a>
+                    </div>
+                </div>
+                <div class="slide" style="background-image: url('assets/img/tim7.webp')">
+                    <div class="slide-content">
+                         <h2>Kecepatan & Kebersihan Optimal</h2> 
+                        <p>Kami memastikan pakaian Anda bersih, rapi, dan wangi dalam waktu singkat tanpa mengurangi kualitas.</p> --}}
+                        <a href="#cta" class="button">Hubungi Kami</a>
+                    </div>
+                </div>
+            </div>
+            <button onclick="prevSlide()" class="btn-slider btn-left"><i class="fas fa-chevron-left"></i></button>
+            <button onclick="nextSlide()" class="btn-slider btn-right"><i class="fas fa-chevron-right"></i></button>
+        </div>
     </section>
 
-    <section id="features" class="features">
+    <section id="about" class="section about-us">
         <div class="container">
-            <h2>Tentang Kami </h2>
-            <div class="feature-grid">
+            <h2 class="section-title fade-in">Tentang Kami</h2>
+            <div class="feature-grid fade-in">
                 <div class="feature-item">
-                     <img src="assets/img/kami1.png" alt="Logo Laundry" class="feature-logo">
-                    <p>
-                        Kami adalah layanan laundry modern yang hadir untuk membantu Anda menjaga kebersihan dan kesegaran pakaian setiap hari. Dengan dukungan tenaga profesional, mesin cuci berteknologi terbaru, serta penggunaan deterjen berkualitas, kami berkomitmen memberikan hasil terbaik untuk setiap cucian.
-                    </p>
+                    <i class="fas fa-soap feature-icon"></i>
+                    <h3>Profesional & Berpengalaman</h3>
+                    <p>Kami adalah layanan laundry modern yang hadir untuk membantu Anda menjaga kebersihan dan kesegaran pakaian setiap hari.</p>
                 </div>
                 <div class="feature-item">
-                     <img src="assets/img/kami2.png" alt="Logo Laundry" class="feature-logo">
-                    <p>Kami memahami betapa berharganya waktu Anda, karena itu kami menyediakan layanan antar jemput gratis, sehingga Anda bisa tetap fokus pada aktivitas penting tanpa harus repot mengurus cucian.</p>
+                    <i class="fas fa-truck-pickup feature-icon"></i>
+                    <h3>Layanan Antar Jemput</h3>
+                    <p>Kami memahami betapa berharganya waktu Anda, karena itu kami menyediakan layanan antar jemput gratis.</p>
                 </div>
                 <div class="feature-item">
-                     <img src="assets/img/kami3.png" alt="Logo Laundry" class="feature-logo">
-                    <p>Visi kami adalah menjadi pilihan utama masyarakat dalam layanan laundry dengan mengutamakan kebersihan, ketepatan waktu, dan kepuasan pelanggan.</p>
+                    <i class="fas fa-hand-holding-heart feature-icon"></i>
+                    <h3>Visi & Misi</h3>
+                    <p>Visi kami adalah menjadi pilihan utama masyarakat dalam layanan laundry dengan mengutamakan kebersihan dan kepuasan pelanggan.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section style="display:flex; align-items:center; gap:20px; max-width:1000px; margin:40px auto; font-family:Arial, sans-serif;">
-  
-  <!-- Gambar -->
-  <div style="flex:1;">
-    <img src="assets/img/slide4.webp" alt="Outbound Pangalengan" style="width:100%; border-radius:10px;">
-  </div>
-
-  <!-- Box Deskripsi -->
-  <div style="flex:1; margin-left:-100px; text-align:left; background-color:#007bff; color:#fff; padding:20px; border-radius:15px;">
-    <h2 style="margin-top:0; font-size:22px;">Team 7 <br>Silit Laundry</h2>
-    <hr style="width:50px; border:2px solid #fff; margin:10px 0;">
-    <p style="line-height:1.6; font-size:16px;">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi sed reiciendis magni nam nesciunt, voluptates iure esse incidunt est itaque corrupti. Iste, sapiente praesentium. Nostrum quis iure beatae deserunt consectetur!
-    </p>
-    <a href="#" style="display:inline-block; margin-top:15px; padding:10px 20px; background:#fff; color:#333; text-decoration:none; border-radius:25px; font-weight:bold;">
-      Selengkapnya &nbsp; ›
-    </a>
-  </div>
-
-</section>
-
-
-    <section id="testimonials" class="testimonials">
-        <div class="container">
-            <h3>Apa Kata Mereka?</h3>
-            <div class="testimonial-item">
-                <i class="fas fa-user-circle user-icon"></i>
-                <div class="stars">⭐⭐⭐⭐⭐⭐</div>
-                <p>"Produk ini benar-benar luar biasa! Sangat membantu dan mudah digunakan. Saya sangat merekomendasikannya!"</p>
-                <cite>- Nama Pengguna 1</cite>
+    <section id="services" class="section team-section">
+        <div class="container team-content">
+            <div class="team-text fade-in-left">
+                <h2 class="section-title">Layanan Kami</h2>
+                <hr class="divider">
+                <p>Kami menawarkan berbagai layanan laundry untuk memenuhi kebutuhan spesifik Anda, mulai dari laundry kiloan, satuan, hingga dry cleaning. Setiap layanan kami ditangani dengan cermat oleh tim profesional untuk hasil yang maksimal.</p>
+                <a href="#" class="button">Lihat Semua Layanan</a>
             </div>
-            <div class="testimonial-item">
-                <i class="fas fa-user-circle user-icon"></i>
-                <div class="stars">⭐⭐⭐⭐⭐⭐</div>
-                <p>"Layanan pelanggan mereka sangat responsif. Saya senang bisa menggunakan produk ini setiap hari."</p>
-                <cite>- Nama Pengguna 2</cite>
+            <div class="team-image fade-in-right">
+                <img src="assets/img/slide4.webp" alt="Tim Silit Laundry">
             </div>
         </div>
     </section>
 
-    <section id="cta" class="cta">
+    <section id="testimonials" class="section testimonials">
         <div class="container">
-            
-            <h3>Siap untuk Mulai?</h3>
-            <p>Jangan lewatkan kesempatan. Gabung dengan ribuan pengguna lain yang sudah merasakan manfaatnya.</p>
+            <h2 class="section-title fade-in">Apa Kata Mereka?</h2>
+            <div class="testimonial-grid fade-in">
+                <div class="testimonial-item">
+                    <div class="rating-user-info">
+                        <i class="fas fa-user-circle user-icon"></i>
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p>"Produk ini benar-benar luar biasa! Sangat membantu dan mudah digunakan. Saya sangat merekomendasikannya!"</p>
+                    <cite>- Nama Pengguna 1</cite>
+                </div>
+                <div class="testimonial-item">
+                    <div class="rating-user-info">
+                        <i class="fas fa-user-circle user-icon"></i>
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                    </div>
+                    <p>"Layanan pelanggan mereka sangat responsif. Saya senang bisa menggunakan produk ini setiap hari."</p>
+                    <cite>- Nama Pengguna 2</cite>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cta" class="section cta-section">
+        <div class="container fade-in">
+            <h3 class="section-title">Siap untuk Mulai?</h3>
+            <p>Dapatkan pengalaman laundry terbaik. Gabung dengan ribuan pelanggan lain yang sudah merasakan manfaatnya.</p>
             <a href="{{ route('register') }}" class="button button-cta">Daftar Sekarang!</a>
         </div>
     </section>
 
-    <!-- <footer id="contact" class="footer">
+    <footer id="contact" class="footer">
         <div class="container">
-            <div class="footer-links">
-                <p>&copy; 2025  Silit. Team IT Nurul Islam Affandiyah.</p>
-                <div>
-                    <a href="#">Facebook</a> | 
-                    <a href="#">Instagram</a>
-                </div>
+            <div class="footer-col">
+                <img src="assets/img/logo.jpg" alt="Logo Footer" class="footer-logo">
+                <p>Menyediakan layanan Laundry Kiloan, Satuan, Dry Cleaning, Antar Jemput, serta Perawatan Pakaian dengan kualitas terbaik.</p>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.551608674516!2d107.13689231477317!3d-6.944208595018659!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e690a8a65f1c247%3A0x6a1c5d9c7d413c6!2sJl.%20Raya%20Bandung%20No.117%2C%20Ciranjang%2C%20Kec.%20Ciranjang%2C%20Kabupaten%20Cianjur%2C%20Jawa%20Barat%2043282!5e0!3m2!1sid!2sid!4v1638421876807!5m2!1sid!2sid" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <p class="footer-address">📍 Jl. Raya Bandung No.117, Ciranjang, Kab. Cianjur</p>
             </div>
-            <div class="footer-auth">
-                
+            <div class="footer-col">
+                <h3>Layanan</h3>
+                <ul class="footer-list">
+                    <li><a href="#">Laundry Kiloan</a></li>
+                    <li><a href="#">Laundry Satuan</a></li>
+                    <li><a href="#">Dry Cleaning</a></li>
+                    <li><a href="#">Antar Jemput</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Hubungi Kami</h3>
+                <ul class="footer-list">
+                    <li><a href="https://wa.me/6283873304630">Muhamad Fazril</a></li>
+                    <li><a href="https://wa.me/6283189454760">M Rifqy</a></li>
+                    <li><a href="https://wa.me/6285865812892">M Ridho</a></li>
+                    <li><a href="https://wa.me/6287739973366">Aldira Firdaus</a></li>
+                    <li><a href="https://wa.me/6281318316350">Fachri Rido</a></li>
+                    <li><a href="https://wa.me/6285938608981">M Fiki Jamal</a></li>
+                </ul>
             </div>
         </div>
-    </footer> -->
-<footer id="contact" class="footer" style=" background:#f8f9fa; padding:40px 0; font-family:Arial, sans-serif; color:#333;">
-  <div class="container" style="align-items: center;
-            max-width:1200px; margin:auto; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:flex-start; gap:30px;">
+        <div class="footer-bottom">
+            <p>Copyright &copy; 2024 Silit Laundry. All Rights Reserved.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
 
-    <!-- Logo dan Deskripsi -->
-    <div style="flex:1 1 300px; text-align:left; max-width:350px;">
-  <img src="assets/img/logo.jpg" alt="Logo" style="height:150px; margin-bottom:15px; display:block;">
-
-  <p style="margin-bottom:20px; line-height:1.6; margin:2;">
-     Menyediakan layanan Laundry Kiloan, Satuan, Dry Cleaning, Antar Jemput, 
-  serta Perawatan Pakaian dengan kualitas terbaik, cepat, dan harga terjangkau 
-  untuk memenuhi kebutuhan harian Anda.
-  </p>
-
-  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15846.559421137525!2d107.23371995541993!3d-6.813584899999988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6855fe2dae0077%3A0x97d4599eeb3422c1!2sIndo%20Express%20Laundry%20Ciranjang!5e0!3m2!1sid!2sid!4v1757385591883!5m2!1sid!2sid" width="250" height="150" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
-  <p style="margin-top:15px; line-height:1.6;">
-    <span style="font-size:14px;">📍 Jl. Raya Bandung No.117, Ciranjang, Kec. Ciranjang, Kabupaten Cianjur, Jawa Barat 43282</span>
-  </p>
-</div>
-
-
-    <!-- Layanan -->
-    <div style="flex:1 1 200px;">
-      <h3 style="margin-bottom:15px; font-size:18px;">Layanan</h3>
-      <ul style="list-style:none; padding:0; line-height:1.8;">
-        <li>We</li>
-        <li>D</li>
-        <li>C</li>
-        <li>C</li>
-      </ul>
-    </div>
-
-    <!-- Hubungi Kami -->
-    <div style="flex:1 1 200px;">
-      <h3 style="margin-bottom:15px; font-size:18px;">Hubungi Kami</h3>
-      <p>PA.BUDI</p>
-      <p>MANG.UJANG</p>
-      <p>PA.ACENG</p>
-      <p>PA.ESTRA</p>
-      <p>PA.ABDUL</p>
-      <p>PA.ENGKUS</p>
-
-    </div>
-  </div>
-
-  <!-- Copyright -->
-  <div style="text-align:center; margin-top:30px; font-size:14px; border-top:1px solid #8a8a8aff; padding-top:15px;">
-    Copyright 2026 blablaablalbalab
-  </div>
-</footer>
-
-
-
-  <script>
-  const slider = document.getElementById("slider");
-  const slides = document.querySelectorAll(".slide");
-  let index = 0;
-
-  function showSlide() {
-    slider.style.transform = `translateX(-${index * 100}%)`;
-  }
-
-  function nextSlide() {
-    index = (index + 1) % slides.length;
-    showSlide();
-  }
-
-  function prevSlide() {
-    index = (index - 1 + slides.length) % slides.length;
-    showSlide();
-  }
-
-  // auto geser kanan tiap 5 detik
-  setInterval(nextSlide, 5000);
-</script>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/animations.js"></script>
 </body>
 </html>
-

@@ -1,70 +1,55 @@
 @extends('layouts.main')
 
-@section('title', 'Profile')
-
 @section('content')
-<div class="py-4">
-    <h2 class="h4 mb-4 text-gray-800">Profile Saya</h2>
+<div class="card p-4">
+    <h4 class="mb-3">Edit Profil</h4>
 
-    <div class="row">
-        {{-- Update Profile Information --}}
-        <div class="col-md-6 mb-4">
-            <div class="card shadow border-0 rounded-3 fade-in">
-                <div class="card-header bg-primary text-white fw-bold">
-                    <i class="fas fa-user-edit me-1"></i> Update Profile
-                </div>
-                <div class="card-body">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+    @if (session('status') === 'profile-updated')
+        <div class="alert alert-success">Profil berhasil diperbarui ✅</div>
+    @endif
+
+    <form method="POST" action="{{ route('profile.update') }}">
+        @csrf
+        @method('PATCH')
+
+        <!-- Nama -->
+        <div class="mb-3">
+            <label class="form-label">Nama</label>
+            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="form-control">
+            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
 
-        {{-- Update Password --}}
-        <div class="col-md-6 mb-4">
-            <div class="card shadow border-0 rounded-3 fade-in">
-                <div class="card-header bg-warning text-dark fw-bold">
-                    <i class="fas fa-key me-1"></i> Update Password
-                </div>
-                <div class="card-body">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+        <!-- Email -->
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control">
+            @error('email') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
-    </div>
 
-    {{-- Delete User --}}
-    {{-- <div class="row">
-        <div class="col-md-12 mb-4">
-            <div class="card shadow border-0 rounded-3 fade-in">
-                <div class="card-header bg-danger text-white fw-bold">
-                    <i class="fas fa-trash-alt me-1"></i> Hapus Akun
-                </div>
-                <div class="card-body">
-                    @include('profile.partials.delete-user-form')
-                </div>
+        @if ($user->role === 'pelanggan')
+            <!-- Tanggal Lahir -->
+            <div class="mb-3">
+                <label class="form-label">Tanggal Lahir</label>
+                <input type="date" name="ttl" value="{{ old('ttl', $user->ttl) }}" class="form-control">
+                @error('ttl') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
-        </div>
-    </div>
-</div> --}}
+
+            <!-- Alamat -->
+            <div class="mb-3">
+                <label class="form-label">Alamat</label>
+                <textarea name="alamat" class="form-control">{{ old('alamat', $user->alamat) }}</textarea>
+                @error('alamat') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+
+            <!-- No HP -->
+            <div class="mb-3">
+                <label class="form-label">No HP</label>
+                <input type="number" name="no_hp" value="{{ old('no_hp', $user->no_hp) }}" class="form-control">
+                @error('no_hp') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+        @endif
+
+        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+    </form>
+</div>
 @endsection
-
-@push('styles')
-<style>
-    /* Animasi Fade */
-    .fade-in { opacity: 0; transform: translateY(15px); animation: fadeInUp .6s forwards ease-in-out; }
-    @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
-    /* Tombol Animasi */
-    .btn {
-        transition: all 0.25s ease-in-out;
-        border-radius: 8px;
-    }
-    .btn:hover {
-        transform: translateY(-3px) scale(1.05);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
-    }
-    .btn:active {
-        transform: scale(0.95);
-    }
-</style>
-@endpush

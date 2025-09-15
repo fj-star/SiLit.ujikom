@@ -138,13 +138,13 @@
                                 <td>{{ $transaksi->created_at->format('d M Y') }}</td>
                                 <td>
                                     <div class="btn-group">
-                                        <a href="{{ route('pelanggan.transaksi.edit', $transaksi->id) }}" 
+                                        {{-- <a href="{{ route('pelanggan.transaksi.edit', $transaksi->id) }}" 
                                            class="btn btn-sm btn-warning" 
                                            data-toggle="tooltip" 
                                            data-placement="top" 
                                            title="Edit">
                                             <i class="fas fa-edit"></i>
-                                        </a>
+                                        </a> --}}
                                         <form action="{{ route('pelanggan.transaksi.destroy', $transaksi->id) }}" 
                                               method="POST" 
                                               style="display:inline-block;">

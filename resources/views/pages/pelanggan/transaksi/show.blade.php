@@ -66,9 +66,7 @@
                     
                     <div class="mt-4">
                         @if($transaksi->status == 'pending')
-                            <a href="{{ route('pelanggan.transaksi.edit', $transaksi->id) }}" class="btn btn-warning">
-                                <i class="fas fa-edit"></i> Edit
-                            </a>
+                            {{-- <   --}}
                             
                             <form action="{{ route('pelanggan.transaksi.destroy', $transaksi->id) }}" method="POST" style="display:inline-block;">
                                 @csrf

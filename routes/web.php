@@ -13,6 +13,30 @@ use App\Http\Controllers\Admin\TreatmentController;
 use App\Http\Controllers\Pelanggan\DashboardController as PelangganDashboardController; // Alias untuk dashboard pelanggan
 use App\Http\Controllers\Pelanggan\PelangganController as UserPelangganController;
 use App\Http\Controllers\Pelanggan\TransaksiController as UserTransaksiController;
+use App\Models\Transaksi;
+use App\Mail\TransaksiSelesaiMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Http;
+
+Route::get('/test-fonnte', function () {
+    $res = Http::withHeaders([
+        'Authorization' => config('services.fonnte.token'),
+    ])->post('https://api.fonnte.com/send', [
+        'target'  => '6285865812892', // 👉 ganti dengan nomor WA tujuan, tanpa +
+        'message' => 'Test kirim notifikasi dari Laravel 🚀',
+    ]);
+
+    return $res->json();
+});
+
+Route::get('/test-email', function () {
+    $transaksi = Transaksi::with('user','layanan')->first(); // ambil 1 transaksi
+
+    Mail::to('alamat_email_tujuan@gmail.com')
+        ->send(new TransaksiSelesaiMail($transaksi));
+
+    return "Email test terkirim ✅";
+});
 
 Route::get('/', function () {
     return view('welcome');
