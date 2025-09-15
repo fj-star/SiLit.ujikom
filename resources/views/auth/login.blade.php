@@ -13,25 +13,25 @@
         
         <!-- Bagian Kiri -->
         <div class="p-10">
-            <h2 class="text-2xl font-semibold mb-2">Get's Started</h2>
+            <h2 class="text-2xl font-semibold mb-2">Masuk Ke Akun Silit</h2>
             <p class="text-gray-500 mb-6">
-                Don't have Account?
-                <a href="{{ route('register') }}" class="text-blue-500 font-semibold">Sign Up</a>
+                Ga Punya Akun?
+                <a href="{{ route('register') }}" class="text-blue-500 font-semibold">Daftar sini</a>
             </p>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 
                 <!-- Username -->
                 <div class="mb-4">
-                    <label for="email" class="block text-gray-700">Username</label>
-                    <input type="email" name="email" id="email" placeholder="Insert Username"
+                    <label for="email" class="block text-gray-700">Email</label>
+                    <input type="email" name="email" id="email" placeholder="masukan email"
                         class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
                 </div>
                 <!-- Password -->
                 <div class="mb-2">
                     <label for="password" class="block text-gray-700">Password</label>
                     <div class="relative">
-                        <input type="password" name="password" id="password" placeholder="Insert Password"
+                        <input type="password" name="password" id="password" placeholder="Masukam Password"
                             class="w-full px-4 py-2 pr-10 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none">
                         <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center">
                             <i id="passwordIcon" class="fas fa-eye-slash text-gray-500 hover:text-gray-700"></i>
@@ -42,7 +42,7 @@
                 <div class="text-right mb-6">
                     @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}" class="text-sm text-blue-500 hover:underline">
-                            Forgot your password?
+                            Lupa password?
                         </a>
                     @endif
                 </div>
@@ -61,17 +61,13 @@
             </form>
         </div>
         <!-- Bagian Kanan -->
-        <div class="bg-blue-500">
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>- {{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
+        <div class="bg-blue-500 relative">
+    <img src="assets/img/logo.jpg" alt="Logo Silit Laundry" 
+         alt="Login Illustration"
+         class="w-full h-full object-cover">
+    <!-- Overlay transparan (opsional biar teks kiri lebih kontras) -->
+    {{-- <div class="absolute inset-0 bg-blue-600 bg-opacity-40"></div> --}}
+</div>
         
     </div>
 </body>
