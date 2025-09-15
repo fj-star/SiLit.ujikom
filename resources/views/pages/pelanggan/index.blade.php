@@ -146,13 +146,7 @@
                                                         <i class="fas fa-eye"></i>
                                                     </a>
                                                     @if($transaksi->status == 'pending')
-                                                        <form action="{{ route('pelanggan.transaksi.destroy', $transaksi->id) }}" method="POST" style="display:inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger" data-toggle="tooltip" title="Hapus" onclick="return confirm('Yakin ingin menghapus transaksi ini?')">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
+                                                        
                                                     @endif
                                                 </div>
                                             </td>

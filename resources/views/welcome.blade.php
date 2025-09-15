@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Silit Laundry - Solusi Kebersihan Pakaian Anda</title>
+    <link rel="icon" href="{{ asset('assets/img/logo.jpg') }}" type="image/png">
+
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -36,8 +38,8 @@
                 </div>
                 <div class="slide" style="background-image: url('assets/img/slide2.webp')">
                     <div class="slide-content">
-                        <h2>Layanan Antar Jemput Gratis</h2>
-                        <p>Nikmati kemudahan layanan antar jemput gratis, agar Anda bisa lebih fokus pada hal penting lainnya.</p>
+                        <h2>Layanan </h2>
+                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Accusamus consectetur cupiditate nostrum dignissimos exercitationem. Cum quae sequi maiores dicta explicabo aut quam maxime hic optio quisquam, non nam alias qui!</p>
                         <a href="{{ route('register') }}" class="button">Daftar Sekarang!</a>
                     </div>
                 </div>

@@ -21,7 +21,7 @@
                 <td>{{ $log->keterangan }}</td>
                 <td>{{ $log->created_at->format('d-m-Y H:i') }}</td>
                 <td>
-        <form action="{{ route('admin.log-aktivitas.destroy', $log->id) }}" method="POST" onsubmit="return confirm('Yakin hapus log ini?')">
+        <form action="{{ route('admin.log-aktivitas.destroy', $log->id) }}" method="POST" class="d-inline delete-form">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger btn-sm">Hapus</button>

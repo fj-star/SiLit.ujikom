@@ -4,11 +4,11 @@
 <div class="card p-4">
     <h4 class="mb-3">Daftar Treatment</h4>
     <a href="{{ route('admin.treatments.create') }}" class="btn btn-primary mb-3">Tambah Treatment</a>
-
+    
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+    <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-
+    
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
@@ -27,12 +27,15 @@
                     <td>Rp {{ number_format($treatment->harga, 0, ',', '.') }}</td>
                     <td>{{ $treatment->diskon }}%</td>
                     <td>
-                        <a href="{{ route('admin.treatments.edit', $treatment) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('admin.treatments.destroy', $treatment) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus treatment ini?')">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm">Hapus</button>
-                        </form>
+                        <div class="flex gap-1">
+
+                            <a href="{{ route('admin.treatments.edit', $treatment) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="{{ route('admin.treatments.destroy', $treatment) }}" method="POST" class="d-inline delete-form" >
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-danger btn-sm">Hapus</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             @empty

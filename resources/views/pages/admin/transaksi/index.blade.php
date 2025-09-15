@@ -14,7 +14,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-
+                <div class="table-responsive">
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -50,6 +50,7 @@
                             </td>
                             <td>{{ $transaksi->created_at->format('d M Y') }}</td>
                             <td>
+                                <div class="d-flex ">
                                 <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" 
                                    class="btn btn-warning btn-sm">Edit</a>
 
@@ -61,6 +62,7 @@
                                         Hapus
                                     </button>
                                 </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -70,6 +72,7 @@
                     @endforelse
                 </tbody>
             </table>
+                </div>
         </div>
     </div>
 </div>

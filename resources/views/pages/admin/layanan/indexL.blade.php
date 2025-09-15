@@ -30,17 +30,15 @@
                             <td>{{ $layanan->deskripsi ?: '-' }}</td>
                             <td><span class="badge bg-success">Rp {{ number_format($layanan->harga, 0, ',', '.') }}</span></td>
                             <td>
-                                <a href="{{ route('admin.layanans.edit', $layanan) }}" class="btn btn-warning btn-sm">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <form action="{{ route('admin.layanans.destroy', $layanan) }}" 
-                                      method="POST" 
-                                      class="d-inline"
-                                      onsubmit="return confirm('Yakin ingin menghapus layanan ini?')">
+                                <a href="{{ route('admin.layanans.edit', $layanan->id) }}" 
+                                   class="btn btn-warning btn-sm">Edit</a>
+
+                                <form action="{{ route('admin.layanans.destroy', $layanan->id) }}" 
+                                      method="POST" class="d-inline delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm">
-                                        <i class="bi bi-trash"></i>
+                                    <button type="submit" class="btn btn-danger btn-sm btn-delete">
+                                        Hapus
                                     </button>
                                 </form>
                             </td>
@@ -56,3 +54,5 @@
     </div>
 </div>
 @endsection
+
+

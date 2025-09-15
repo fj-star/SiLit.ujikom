@@ -34,14 +34,16 @@
                             <td>{{ $pelanggan->alamat }}</td>
                             <td>{{ $pelanggan->ttl }}</td>
                             <td>
-                                <a href="{{ route('admin.pelanggans.edit', $pelanggan->id) }}" class="btn btn-warning btn-sm">Edit</a>
-        
+                                <a href="{{ route('admin.pelanggans.edit', $pelanggan->id) }}" 
+                                   class="btn btn-warning btn-sm">Edit</a>
+
                                 <form action="{{ route('admin.pelanggans.destroy', $pelanggan->id) }}" 
-                                      method="POST" style="display:inline-block;"
-                                      onsubmit="return confirm('Yakin ingin menghapus pelanggan ini?')">
+                                      method="POST" class="d-inline delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                                    <button type="button" class="btn btn-danger btn-sm btn-delete">
+                                        Hapus
+                                    </button>
                                 </form>
                             </td>
                         </tr>

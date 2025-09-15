@@ -18,7 +18,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table id="example1" class="table table-bordered">
                             <tr>
                                 <th width="30%">ID Transaksi</th>
                                 <td>INV{{ str_pad($transaksi->id, 4, '0', STR_PAD_LEFT) }}</td>
@@ -66,15 +66,7 @@
                     
                     <div class="mt-4">
                         @if($transaksi->status == 'pending')
-                            {{-- <   --}}
                             
-                            <form action="{{ route('pelanggan.transaksi.destroy', $transaksi->id) }}" method="POST" style="display:inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Yakin ingin menghapus transaksi ini?')">
-                                    <i class="fas fa-trash"></i> Hapus
-                                </button>
-                            </form>
                         @endif
                         
                         <a href="{{ route('pelanggan.transaksi.index') }}" class="btn btn-secondary">
@@ -220,4 +212,5 @@
         color: #5a5c69;
     }
 </style>
+
 @endsection
