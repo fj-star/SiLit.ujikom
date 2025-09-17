@@ -56,10 +56,12 @@ class DashboardController extends Controller
             ->latest()
             ->take(5)
             ->get();
+           
             
         return view('pages.admin.index', compact(
-            'totalPemesanan',
             'omzetBulanIni',
+            'totalPemesanan',
+            // 'userName',
             'pelangganCount',
             'layananCount',
             'treatmentCount',

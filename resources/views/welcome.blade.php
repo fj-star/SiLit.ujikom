@@ -6,7 +6,7 @@
     <title>Silit Laundry - Solusi Kebersihan Pakaian Anda</title>
     <link rel="icon" href="{{ asset('assets/img/logo.jpg') }}" type="image/png">
 
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -46,7 +46,7 @@
                 <div class="slide" style="background-image: url('assets/img/tim7.webp')">
                     <div class="slide-content">
                          <h2>Kecepatan & Kebersihan Optimal</h2> 
-                        <p>Kami memastikan pakaian Anda bersih, rapi, dan wangi dalam waktu singkat tanpa mengurangi kualitas.</p> --}}
+                        <p>Kami memastikan pakaian Anda bersih, rapi, dan wangi dalam waktu singkat tanpa mengurangi kualitas.</p>
                         <a href="#cta" class="button">Hubungi Kami</a>
                     </div>
                 </div>
@@ -163,7 +163,7 @@
         </div>
     </footer>
 
-    <script src="assets/js/script.js"></script>
-    <script src="assets/js/animations.js"></script>
+    <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="{{ asset('assets/js/animations.js')}}"></script>
 </body>
 </html>

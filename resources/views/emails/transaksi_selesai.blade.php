@@ -10,6 +10,10 @@
     <p>
         Pesanan laundry Anda dengan ID <strong>#{{ $transaksi->id }}</strong> telah <span style="color:green;">selesai</span>.
     </p>
+    <br>
+    <p>
+        <span>mohon untuk ambil Pesanan ini <strong>abaikan jika sudah</strong> </span>
+    </p>
 
     <p><strong>Detail Pesanan:</strong></p>
     <ul>
