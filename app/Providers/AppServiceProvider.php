@@ -22,9 +22,10 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
-         if (str_contains(request()->getHost(), 'ngrok-free.app')) {
-        URL::forceScheme('https');
+{
+    // Cek kalau akses lewat ngrok (baik .app maupun .dev) atau lewat HTTPS proxy
+    if (str_contains(request()->getHost(), 'ngrok-free')) {
+        \Illuminate\Support\Facades\URL::forceScheme('https');
     }
         // Directive untuk format Rupiah
             Blade::directive('rupiah', function ($expression) {

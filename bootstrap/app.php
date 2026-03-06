@@ -12,15 +12,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->alias([
-            'role'  => \App\Http\Middleware\RoleMiddleware::class,
-            'guest' => RedirectIfAuthenticated::class,
-        ]);
-        $middleware->validateCsrfTokens(except: [
-        '/midtrans/callback', // Izinkan Midtrans masuk tanpa token CSRF
-        
+    $middleware->alias([
+        'role'  => \App\Http\Middleware\RoleMiddleware::class,
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
     ]);
-    })
+
+    // Tambahkan ini biar Ngrok gak bikin error "Insecure" atau CSS pecah
+    $middleware->trustProxies(at: '*'); 
+
+    $middleware->validateCsrfTokens(except: [
+        '/midtrans/callback', 
+    ]);
+})
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })

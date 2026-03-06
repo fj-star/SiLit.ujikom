@@ -69,37 +69,24 @@ class TransaksiController extends Controller
     /* ================= MIDTRANS ================= */
 
     public function bayarMidtrans(Transaksi $transaksi)
-    {
+{
     abort_if($transaksi->user_id !== auth()->id(), 403);
 
-    // kalau sudah lunas, jangan bisa bayar lagi
     if ($transaksi->payment_status === 'paid') {
-        return redirect()
-            ->route('pelanggan.transaksi.index')
-            ->with('success', 'Transaksi sudah lunas');
+        return redirect()->route('pelanggan.transaksi.index')->with('success', 'Transaksi sudah lunas');
     }
 
-    // INIT MIDTRANS
     \App\Services\MidtransService::init();
 
-    /**
-     * ORDER ID
-     * cuma dibuat SEKALI
-     */
-    if (!$transaksi->order_id) {
-        $transaksi->update([
-            'order_id' => 'TRX-' . $transaksi->id
-        ]);
-    }
-
-    /**
-     * SNAP TOKEN
-     * cuma dibuat SEKALI
-     */
-    if (!$transaksi->snap_token) {
+    // SUPAYA TIDAK ERROR 400: Kita buat Order ID yang selalu unik tiap kali mau bayar
+    // Tapi kita simpan di kolom order_id supaya bisa dilacak saat callback
+    $newOrderId = 'INSTA-' . $transaksi->id . '-' . time();
+    
+    // Kita generate Snap Token baru setiap kali masuk halaman ini biar fresh
+    try {
         $snapToken = \Midtrans\Snap::getSnapToken([
             'transaction_details' => [
-                'order_id'     => $transaksi->order_id,
+                'order_id'     => $newOrderId,
                 'gross_amount' => (int) $transaksi->total_harga,
             ],
             'customer_details' => [
@@ -108,14 +95,19 @@ class TransaksiController extends Controller
             ],
         ]);
 
+        // Update database dengan Order ID terbaru dan Token baru
         $transaksi->update([
+            'order_id'   => $newOrderId,
             'snap_token' => $snapToken
         ]);
+
+    } catch (\Exception $e) {
+        return back()->with('error', 'Gagal terhubung ke Midtrans: ' . $e->getMessage());
     }
 
     return view('pages.pelanggan.transaksi.bayar', [
         'transaksi' => $transaksi,
-        'snapToken' => $transaksi->snap_token
+        'snapToken' => $snapToken
     ]);
 }
 

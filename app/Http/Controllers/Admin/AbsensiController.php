@@ -42,32 +42,36 @@ class AbsensiController extends Controller
     }
 
     public function storeManual(Request $request)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'status'  => 'required|in:izin,sakit,alpha', // Sesuaikan dengan Enum Migration Tuan
-            'keterangan' => 'nullable'
-        ]);
+{
+    $request->validate([
+        'user_id' => 'required|exists:users,id',
+        'status'  => 'required|in:hadir,terlambat,izin,sakit,alpha', // Ditambah hadir & terlambat
+        'jam_masuk' => 'nullable', // Admin bisa input jam manual
+        'keterangan' => 'nullable'
+    ]);
 
-        // Cek apakah hari ini user tersebut sudah ada datanya?
-        $exists = Absensi::where('user_id', $request->user_id)
-                         ->where('tanggal', Carbon::today()->toDateString())
-                         ->exists();
+    $today = \Carbon\Carbon::today()->toDateString();
 
-        if ($exists) {
-            return back()->with('error', 'Karyawan ini sudah memiliki data absensi hari ini, Tuan!');
-        }
+    // Cek biar gak double absen di hari yang sama
+    $exists = Absensi::where('user_id', $request->user_id)
+                     ->where('tanggal', $today)
+                     ->exists();
 
-        Absensi::create([
-            'user_id'    => $request->user_id,
-            'tanggal'    => Carbon::today()->toDateString(),
-            'status'     => $request->status,
-            'keterangan' => $request->keterangan,
-            'jam_masuk'  => Carbon::now()->toTimeString(),
-        ]);
-
-        return back()->with('success', 'Data absensi manual berhasil dicatat, Tuan!');
+    if ($exists) {
+        return back()->with('error', 'Karyawan ini sudah ada data absensinya hari ini, bray!');
     }
+
+    Absensi::create([
+        'user_id'    => $request->user_id,
+        'tanggal'    => $today,
+        'status'     => $request->status,
+        'keterangan' => $request->keterangan,
+        // Kalau Admin gak isi jam, otomatis pakai jam sekarang
+        'jam_masuk'  => $request->jam_masuk ?? \Carbon\Carbon::now()->toTimeString(),
+    ]);
+
+    return back()->with('success', 'Absensi manual berhasil dicatat!');
+}
 
     public function update(Request $request, $id)
     {
@@ -75,6 +79,7 @@ class AbsensiController extends Controller
             'status' => 'required|in:hadir,terlambat,izin,sakit,alpha',
             'jam_masuk' => 'nullable',
             'jam_keluar' => 'nullable',
+            'keterangan' => 'nullable'
         ]);
 
         $absensi = Absensi::findOrFail($id);

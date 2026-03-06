@@ -32,39 +32,27 @@
 </script>
 
 <script>
-    document.getElementById('pay-button').addEventListener('click', function () {
-    this.disabled = true;
-});
-document.getElementById('pay-button').onclick = function () {
-    snap.pay('{{ $snapToken }}', {
-        onSuccess: function(result){
-            location.reload();
-        },
-        onPending: function(result){
-            alert('Menunggu pembayaran');
-        },
-        onError: function(result){
-            alert('Pembayaran gagal');
-        }
-    });
-};
-
-snap.pay('{{ $snapToken }}', {
-    onSuccess: function(result) {
-        /* Panggil swal atau langsung redirect */
-        alert("Pembayaran Berhasil!"); 
-        window.location.href = "{{ route('pelanggan.transaksi.index') }}";
-    },
-    onPending: function(result) {
-        alert("Menunggu pembayaran!");
-        window.location.href = "{{ route('pelanggan.transaksi.index') }}";
-    },
-    onError: function(result) {
-        alert("Pembayaran gagal!");
-    },
-    onClose: function() {
-        alert('Kamu menutup popup tanpa menyelesaikan pembayaran');
-    }
-});
+    const payButton = document.getElementById('pay-button');
+    payButton.onclick = function (e) {
+        e.preventDefault();
+        
+        snap.pay('{{ $snapToken }}', {
+            onSuccess: function(result) {
+                alert("Pembayaran Berhasil!"); 
+                window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+            },
+            onPending: function(result) {
+                alert("Menunggu pembayaran. Silakan cek email atau aplikasi e-wallet Anda.");
+                window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+            },
+            onError: function(result) {
+                alert("Pembayaran gagal! Silakan coba lagi.");
+                location.reload();
+            },
+            onClose: function() {
+                alert('Anda menutup layar pembayaran sebelum selesai.');
+            }
+        });
+    };
 </script>
 @endsection

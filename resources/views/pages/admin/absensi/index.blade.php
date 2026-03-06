@@ -7,7 +7,7 @@
             <div class="card border-left-primary shadow h-100 py-2">
                 <div class="card-body">
                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Karyawan</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['total_karyawan'] }} Orang</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="stat-total">{{ $stats['total_karyawan'] }} Orang</div>
                 </div>
             </div>
         </div>
@@ -15,7 +15,7 @@
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Hadir Hari Ini</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['hadir'] }}</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="stat-hadir">{{ $stats['hadir'] }}</div>
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Terlambat</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['terlambat'] }}</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="stat-terlambat">{{ $stats['terlambat'] }}</div>
                 </div>
             </div>
         </div>
@@ -31,7 +31,7 @@
             <div class="card border-left-info shadow h-100 py-2">
                 <div class="card-body">
                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Izin/Sakit/Cuti</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $stats['izin'] }}</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800" id="stat-izin">{{ $stats['izin'] }}</div>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                             <a class="nav-link active font-weight-bold" id="hari-ini-tab" data-toggle="tab" href="#hari-ini" role="tab">Monitoring Hari Ini</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link font-weight-bold" id="rekap-tab" data-toggle="tab" href="#rekap" role="tab">Input Izin/Cuti</a>
+                            <a class="nav-link font-weight-bold" id="rekap-tab" data-toggle="tab" href="#rekap" role="tab">Input Manual</a>
                         </li>
                     </ul>
                 </div>
@@ -83,13 +83,22 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($absensis as $a)
+                                        @forelse($absensis as $a)
                                         <tr>
                                             <td><strong>{{ $a->user->name }}</strong></td>
                                             <td><span class="text-success font-weight-bold">{{ $a->jam_masuk ?? '--:--' }}</span></td>
                                             <td><span class="text-danger font-weight-bold">{{ $a->jam_keluar ?? '--:--' }}</span></td>
                                             <td>
-                                                <span class="badge badge-{{ $a->status == 'hadir' ? 'success' : ($a->status == 'terlambat' ? 'warning' : 'info') }}">
+                                                @php
+                                                    $badge = [
+                                                        'hadir' => 'success',
+                                                        'terlambat' => 'warning',
+                                                        'izin' => 'info',
+                                                        'sakit' => 'primary',
+                                                        'alpha' => 'danger'
+                                                    ][$a->status] ?? 'secondary';
+                                                @endphp
+                                                <span class="badge badge-{{ $badge }}">
                                                     {{ strtoupper($a->status) }}
                                                 </span>
                                             </td>
@@ -99,7 +108,11 @@
                                                 </a>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                        @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">Belum ada data hari ini.</td>
+                                        </tr>
+                                        @endforelse
                                     </tbody>
                                 </table>
                             </div>
@@ -109,36 +122,50 @@
                         <div class="tab-pane fade" id="rekap" role="tabpanel">
                             <form action="{{ route('admin.absensi.store_manual') }}" method="POST">
                                 @csrf
-                                <div class="form-group">
-                                    <label class="font-weight-bold">Karyawan</label>
-                                    <select name="user_id" class="form-control" required>
-                                        <option value="">-- Pilih Karyawan --</option>
-                                        @foreach(\App\Models\User::where('role', 'karyawan')->get() as $u)
-                                            <option value="{{ $u->id }}">{{ $u->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Status</label>
-                                            <select name="status" class="form-control">
-                                                <option value="izin">Izin</option>
-                                                <option value="sakit">Sakit</option>
-                                                <option value="cuti">Cuti</option>
-                                                <option value="alpha">Alpha (Tanpa Keterangan)</option>
+                                            <label class="font-weight-bold">Pilih Karyawan</label>
+                                            <select name="user_id" class="form-control" required>
+                                                <option value="">-- Pilih Karyawan --</option>
+                                                @foreach(\App\Models\User::where('role', 'karyawan')->get() as $u)
+                                                    <option value="{{ $u->id }}">{{ $u->name }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="font-weight-bold">Keterangan (Alasan)</label>
-                                            <input type="text" name="keterangan" class="form-control" placeholder="Contoh: Sakit Gigi">
+                                            <label class="font-weight-bold">Jam Masuk (Opsional)</label>
+                                            <input type="time" name="jam_masuk" class="form-control" value="{{ date('H:i') }}">
+                                            <small class="text-muted">Kosongkan jika ingin memakai waktu sekarang.</small>
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary btn-block shadow-sm">
-                                    <i class="fas fa-save mr-1"></i> Simpan Absensi Manual
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Status Presensi</label>
+                                            <select name="status" class="form-control" required>
+                                                <option value="hadir">Hadir (Tepat Waktu)</option>
+                                                <option value="terlambat">Terlambat</option>
+                                                <option value="izin">Izin</option>
+                                                <option value="sakit">Sakit</option>
+                                                <option value="alpha">Alpha</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="font-weight-bold">Keterangan / Alasan</label>
+                                            <input type="text" name="keterangan" class="form-control" placeholder="Contoh: HP Rusak / Ban Bocor">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-block shadow-sm">
+                                    <i class="fas fa-check-circle mr-1"></i> Submit Absensi Manual
                                 </button>
                             </form>
                         </div>
@@ -151,18 +178,16 @@
 
 <script>
     function updateStats() {
-        fetch('/api/absensi-stats')
+        fetch('/admin/api/absensi-stats') 
             .then(response => response.json())
             .then(data => {
-                // Update angka di kartu stats (Sesuaikan ID-nya)
                 document.getElementById('stat-total').innerText = data.total_karyawan + ' Orang';
                 document.getElementById('stat-hadir').innerText = data.hadir;
                 document.getElementById('stat-terlambat').innerText = data.terlambat;
                 document.getElementById('stat-izin').innerText = data.izin;
-            });
+            })
+            .catch(error => console.error('Error fetching stats:', error));
     }
-
-    // Jalankan setiap 5 detik
     setInterval(updateStats, 5000);
 </script>
 @endsection
