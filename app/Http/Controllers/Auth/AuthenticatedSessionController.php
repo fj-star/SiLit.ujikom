@@ -46,12 +46,14 @@ class AuthenticatedSessionController extends Controller
      * Proses logout
      */
     public function destroy(Request $request): RedirectResponse
-    {
-        Auth::logout();
+{
+    Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
-        return redirect()->route('login');
-    }
+    // Tambahkan flash message 'logout_success' di sini bray
+    return redirect('/login')->with('logout_success', 'Kamu telah berhasil keluar dari sistem.');
+}
+    
 }

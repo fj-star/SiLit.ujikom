@@ -153,7 +153,7 @@
 
     <hr class="sidebar-divider">
 
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="nav-link btn btn-link text-white w-100 text-start border-0">
@@ -161,6 +161,6 @@
                 <span>Logout</span>
             </button>
         </form>
-    </li>
+    </li> --}}
 
 </ul>

@@ -111,15 +111,16 @@
     @endif
 
     @if(session('logout_success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil Logout',
-            text: '{{ session('logout_success') }}',
-            showConfirmButton: false,
-            timer: 2000
-        });
-    </script>
-    @endif
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Sampai Jumpa!',
+        text: "{{ session('logout_success') }}",
+        showConfirmButton: false,
+        timer: 2500, // Hilang otomatis dalam 2.5 detik
+        timerProgressBar: true,
+    })
+</script>
+@endif
 </body>
 </html>
