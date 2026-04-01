@@ -28,17 +28,9 @@ class AbsensiController extends Controller
 
    public function store(Request $request)
 {
-    $request->validate(['qr_code' => 'required']);
-
     $now = \Carbon\Carbon::now();
     $today = $now->toDateString();
     $timeString = $now->toTimeString();
-
-    // Validasi QR Code tetap sama
-    $kodeValid = 'ABSEN-INSTAWASH-' . $today;
-    if ($request->qr_code !== $kodeValid) {
-        return back()->with('error', 'Wah, QR Code-nya salah maseeh!');
-    }
 
     $user_id = auth()->id();
     // Cari data absen user hari ini

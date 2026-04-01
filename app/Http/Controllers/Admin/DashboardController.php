@@ -41,14 +41,18 @@ class DashboardController extends Controller
         // Total omzet
         $totalOmzet = Transaksi::sum('total_harga');
         
-        // Grafik pesanan per bulan (selalu 12 bulan penuh)
+        // Grafik pesanan per bulan (Ditekan menjadi 1 query untuk mengatasi N+1)
+        $grafikData = Transaksi::selectRaw('MONTH(created_at) as bulan, count(*) as total')
+            ->whereYear('created_at', now()->year)
+            ->groupByRaw('MONTH(created_at)')
+            ->pluck('total', 'bulan')
+            ->toArray();
+
         $chartLabels = [];
         $chartData = [];
         foreach (range(1, 12) as $i) {
             $chartLabels[] = Carbon::create()->month($i)->translatedFormat('F');
-            $chartData[] = Transaksi::whereMonth('created_at', $i)
-                ->whereYear('created_at', now()->year)
-                ->count();
+            $chartData[] = $grafikData[$i] ?? 0;
         }
         
         // Transaksi terbaru - perbaikan relasi di sini

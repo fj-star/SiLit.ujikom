@@ -10,62 +10,86 @@
                 </div>
                 <div class="card-body text-center">
                     @if(!$sudah_absen || ($sudah_absen && !$sudah_absen->jam_keluar))
-                        <p class="text-muted">Arahkan kamera ke QR Code di meja Admin</p>
-                        <div id="reader" class="rounded-lg shadow-inner" style="width: 100%; border: 2px dashed #4e73df;"></div>
-                        
-                        <form id="form-absen" action="{{ route('karyawan.absensi.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="qr_code" id="qr_input">
-                        </form>
+                        <div class="py-4">
+                            <i class="fas fa-fingerprint text-primary fa-5x mb-4"></i>
+                            <h5 class="font-weight-bold mb-3">Tekan Tombol di Bawah Untuk Presensi</h5>
+                            <form id="form-absen" action="{{ route('karyawan.absensi.store') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-primary btn-lg btn-block shadow-sm">
+                                    <i class="fas fa-check-circle mr-2"></i> Hadir / Pulang Sekarang
+                                </button>
+                            </form>
+                        </div>
                     @else
-                        <div class="py-5">
-                            <i class="fas fa-check-circle text-success fa-5x mb-3"></i>
-                            <h4 class="font-weight-bold">Tugas Selesai!</h4>
-                            <p class="text-muted">Tuan sudah absen masuk & pulang hari ini.</p>
+                        <div class="py-4">
+                            <i class="fas fa-check-double text-success fa-5x mb-4"></i>
+                            <h5 class="font-weight-bold text-success mb-3">Anda Sudah Menyelesaikan Presensi Hari Ini</h5>
+                            <p class="text-muted">Terima kasih atas kerja keras Anda. Selamat beristirahat!</p>
                         </div>
                     @endif
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="col-6">
-                    <div class="card border-left-success shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Masuk</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $sudah_absen->jam_masuk ?? '--:--' }}</div>
-                        </div>
-                    </div>
+    <!-- Riwayat Kehadiran Karyawan -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card shadow mb-4 border-0">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-history mr-2"></i>Riwayat Kehadiran Anda</h6>
                 </div>
-                <div class="col-6">
-                    <div class="card border-left-danger shadow h-100 py-2">
-                        <div class="card-body">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Pulang</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $sudah_absen->jam_keluar ?? '--:--' }}</div>
-                        </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Jam Masuk</th>
+                                    <th>Jam Keluar</th>
+                                    <th>Status</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($absensis as $absen)
+                                <tr>
+                                    <td>{{ \Carbon\Carbon::parse($absen->tanggal)->translatedFormat('d F Y') }}</td>
+                                    <td>
+                                        <span class="text-success font-weight-bold">{{ $absen->jam_masuk ?? '--:--' }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-danger font-weight-bold">{{ $absen->jam_keluar ?? '--:--' }}</span>
+                                    </td>
+                                    <td>
+                                        @php
+                                            $badge = [
+                                                'hadir' => 'success',
+                                                'terlambat' => 'warning',
+                                                'izin' => 'info',
+                                                'sakit' => 'primary',
+                                                'alpha' => 'danger'
+                                            ][$absen->status] ?? 'secondary';
+                                        @endphp
+                                        <span class="badge badge-{{ $badge }}">{{ ucfirst($absen->status) }}</span>
+                                    </td>
+                                    <td>{{ $absen->keterangan ?? '-' }}</td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">Belum ada riwayat absensi.</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Pagination jika ada -->
+                    <div class="mt-3">
+                        {{ $absensis->links() ?? '' }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script>
-    function onScanSuccess(decodedText, decodedResult) {
-        // 1. Masukkan hasil scan ke input hidden
-        document.getElementById('qr_input').value = decodedText;
-        
-        // 2. Kirim form secara otomatis
-        document.getElementById('form-absen').submit();
-        
-        // 3. Matikan kamera biar gak berat
-        html5QrcodeScanner.clear();
-    }
-
-    let html5QrcodeScanner = new Html5QrcodeScanner("reader", { 
-        fps: 10, 
-        qrbox: 250 
-    });
-    html5QrcodeScanner.render(onScanSuccess);
-</script>
 @endsection

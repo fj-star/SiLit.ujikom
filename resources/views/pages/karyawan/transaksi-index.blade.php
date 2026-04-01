@@ -41,9 +41,9 @@
         
         {{-- Tombol Konfirmasi Khusus Cash --}}
         @if($t->metode_pembayaran == 'cash')
-            <form action="{{ route('karyawan.transaksi.konfirmasi-bayar', $t->id) }}" method="POST" class="d-inline">
+            <form action="{{ route('karyawan.transaksi.konfirmasi-bayar', $t->id) }}" method="POST" class="d-inline form-konfirmasi-cash">
                 @csrf @method('PUT')
-                <button type="submit" class="btn btn-xs btn-outline-success py-0" style="font-size: 10px;" onclick="return confirm('Sudah terima uang tunai?')">
+                <button type="button" class="btn btn-xs btn-outline-success py-0 btn-konfirmasi-cash" style="font-size: 10px;">
                     Konfirmasi
                 </button>
             </form>
@@ -67,4 +67,33 @@
         {{ $transaksis->links() }}
     </div>
 </div>
+
+<!-- Sweet Alert script -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const confirmButtons = document.querySelectorAll('.btn-konfirmasi-cash');
+        
+        confirmButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('form');
+                
+                Swal.fire({
+                    title: 'Konfirmasi Pembayaran Cash',
+                    text: "Apakah Anda yakin sudah menerima uang cash/tunai dari pelanggan?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Sudah Terima!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 @endsection

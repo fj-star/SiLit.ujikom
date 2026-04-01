@@ -38,25 +38,7 @@
     </div>
 
     <div class="row">
-        <div class="col-xl-4 col-lg-5 text-center">
-            <div class="card shadow mb-4">
-                <div class="card-header bg-primary py-3">
-                    <h6 class="m-0 font-weight-bold text-white">QR Code Presensi</h6>
-                </div>
-                <div class="card-body">
-                    <div class="p-3 border rounded bg-white shadow-sm mb-3">
-                        {!! QrCode::size(250)->margin(2)->generate('ABSEN-INSTAWASH-' . date('Y-m-d')) !!}
-                    </div>
-                    <h5 class="font-weight-bold mb-1">{{ date('l') }}</h5>
-                    <p class="text-muted small">{{ date('d F Y') }}</p>
-                    <button class="btn btn-sm btn-outline-primary btn-block" onclick="window.print()">
-                        <i class="fas fa-print"></i> Cetak QR Tembok
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-8 col-lg-7">
+        <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <ul class="nav nav-tabs card-header-tabs" id="absensiTab" role="tablist">

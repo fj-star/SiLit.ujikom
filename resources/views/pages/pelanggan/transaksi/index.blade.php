@@ -11,10 +11,17 @@
     </div>
 
     @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show border-left-success">
-            <i class="fas fa-check-circle"></i> {{ session('success') }}
-            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-        </div>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                Swal.fire({
+                    title: 'Yeay! Berhasil!',
+                    text: "{{ session('success') }}",
+                    icon: 'success',
+                    confirmButtonText: 'Terima Kasih'
+                });
+            });
+        </script>
     @endif
 
     {{-- Table --}}

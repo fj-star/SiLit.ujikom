@@ -31,6 +31,7 @@
     data-client-key="{{ config('services.midtrans.client_key') }}">
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     const payButton = document.getElementById('pay-button');
     payButton.onclick = function (e) {
@@ -38,19 +39,27 @@
         
         snap.pay('{{ $snapToken }}', {
             onSuccess: function(result) {
-                alert("Pembayaran Berhasil!"); 
-                window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                Swal.fire({
+                    title: 'Pembayaran Berhasil!',
+                    text: 'Terima kasih sudah membayar dan menggunakan layanan InstaWash kami!',
+                    icon: 'success',
+                    confirmButtonText: 'Tutup'
+                }).then((result) => {
+                    window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                });
             },
             onPending: function(result) {
-                alert("Menunggu pembayaran. Silakan cek email atau aplikasi e-wallet Anda.");
-                window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                Swal.fire('Menunggu Pembayaran', 'Silakan cek email atau aplikasi e-wallet Anda.', 'info').then(() => {
+                    window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                });
             },
             onError: function(result) {
-                alert("Pembayaran gagal! Silakan coba lagi.");
-                location.reload();
+                Swal.fire('Gagal!', 'Pembayaran gagal. Silakan coba lagi.', 'error').then(() => {
+                    location.reload();
+                });
             },
             onClose: function() {
-                alert('Anda menutup layar pembayaran sebelum selesai.');
+                Swal.fire('Dibatalkan', 'Anda menutup layar pembayaran sebelum selesai.', 'warning');
             }
         });
     };

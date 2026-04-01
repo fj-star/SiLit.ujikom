@@ -18,8 +18,8 @@
     {{-- Sidebar --}}
     @include('layouts.sidebar')
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-        <div id="content">
+    <div id="content-wrapper" class="d-flex flex-col min-h-screen w-full">
+        <div id="content" class="flex-1">
             {{-- Topbar --}}
             @include('layouts.topbar')
             <!-- Main Content -->
