@@ -111,6 +111,25 @@ class TransaksiController extends Controller
     ]);
 }
 
+    // BYPASS UNTUK DEVELOPMENT LOCAL TANPA NGROK
+    public function forcePaid(Transaksi $transaksi)
+    {
+        abort_if($transaksi->user_id !== auth()->id(), 403);
+        $transaksi->update(['payment_status' => 'paid']);
+        return response()->json(['success' => true, 'message' => 'Status forced to paid']);
+    }
+
+    // Halaman Invoice (Tampilan Saja, Tanpa Tombol Print)
+    public function invoice(Transaksi $transaksi)
+    {
+        abort_if($transaksi->user_id !== auth()->id(), 403);
+        
+        return view('pages.transaksi.invoice', [
+            'transaksi' => $transaksi,
+            'isPrint' => false // Dilihat fitur sesuai perintah user, pelanggan tidak bisa print
+        ]);
+    }
+
     /* ================= HELPER ================= */
 
     private function hitungTotalHarga($layanan_id, $treatment_id, $berat)

@@ -18,8 +18,8 @@
     {{-- Sidebar --}}
     @include('layouts.sidebar')
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-col min-h-screen w-full">
-        <div id="content" class="flex-1">
+    <div id="content-wrapper" class="d-flex flex-column min-vh-100 overflow-hidden">
+        <div id="content" class="flex-grow-1">
             {{-- Topbar --}}
             @include('layouts.topbar')
             <!-- Main Content -->

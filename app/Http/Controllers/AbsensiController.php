@@ -15,8 +15,9 @@ class AbsensiController extends Controller
         $today = Carbon::today()->toDateString();
         
         if ($user->role === 'admin') {
-            $absensis = Absensi::with('user')->latest()->paginate(20);
-            return view('pages.admin.absensi.index', compact('absensis'));
+            $absensisHariIni = Absensi::with('user')->where('tanggal', $today)->latest()->paginate(10, ['*'], 'page_hari_ini');
+            $riwayatAbsensis = Absensi::with('user')->where('tanggal', '!=', $today)->latest()->paginate(20, ['*'], 'page_riwayat');
+            return view('pages.admin.absensi.index', compact('absensisHariIni', 'riwayatAbsensis'));
         }
 
         // Untuk Karyawan

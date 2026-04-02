@@ -110,6 +110,8 @@
     @else
         <span class="text-muted small italic">Bayar di Kasir</span>
     @endif
+    <br>
+    <a href="{{ route('pelanggan.transaksi.invoice', $transaksi->id) }}" class="btn btn-sm btn-info mt-1"><i class="fas fa-file-invoice"></i> Struk</a>
 </td>
                         </tr>
                     @empty

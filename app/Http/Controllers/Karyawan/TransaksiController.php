@@ -113,6 +113,15 @@ class TransaksiController extends Controller
         ->with('success', 'Status InstaWash Berhasil Diperbarui!');
 }
 
+    // Invoice Transaksi
+    public function invoice(Transaksi $transaksi)
+    {
+        return view('pages.transaksi.invoice', [
+            'transaksi' => $transaksi,
+            'isPrint' => true // Karyawan bisa print
+        ]);
+    }
+
     public function destroy(Transaksi $transaksi)
     {
         $transaksi->delete();

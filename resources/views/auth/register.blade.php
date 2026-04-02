@@ -9,12 +9,12 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
 
-    <div class="bg-white rounded-xl shadow-lg w-[800px] grid grid-cols-2 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
         
         <!-- Bagian Kiri -->
-        <div class="p-10">
+        <div class="p-6 md:p-10">
             <h2 class="text-2xl font-semibold mb-2">Buat Akun</h2>
             <p class="text-gray-500 mb-6">
                 Sudah punya akun? 
@@ -100,7 +100,7 @@
         </div>
 
         <!-- Bagian Kanan -->
-        <div class="bg-blue-500 relative">
+        <div class="bg-blue-500 relative hidden md:block">
             <img src="assets/img/logo.jpg" alt="Logo Silit Laundry" 
                 class="w-full h-full object-cover">
         </div>

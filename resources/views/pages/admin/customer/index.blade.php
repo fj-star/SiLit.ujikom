@@ -12,6 +12,7 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
         
+            <div class="table-responsive">
             <table  id="example1" class="table table-bordered ">
                 <thead>
                     <tr>
@@ -61,6 +62,7 @@
                     @endforelse
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
 </div>

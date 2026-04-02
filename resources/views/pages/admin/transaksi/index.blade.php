@@ -53,6 +53,7 @@
                                 </span>
                             </td>
                             <td class="text-center">
+                                <a href="{{ route('admin.transaksi.invoice', $transaksi->id) }}" class="btn btn-info btn-sm" title="Cetak Invoice"><i class="fas fa-print"></i></a>
                                 <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}" method="POST" class="d-inline">
                                     @csrf @method('DELETE')

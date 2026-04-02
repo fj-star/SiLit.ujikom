@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
-    <div class="bg-white rounded-xl shadow-lg w-[800px] grid grid-cols-2 overflow-hidden">
+<body class="bg-gray-100 flex justify-center items-center min-h-screen p-4">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
         
-        <div class="p-10">
+        <div class="p-6 md:p-10">
             {{-- Rebrand Silit -> InstaWash --}}
             <h2 class="text-2xl font-semibold mb-2">Masuk Ke Akun InstaWash</h2>
             <p class="text-gray-500 mb-6">
@@ -71,7 +71,7 @@
             </form>
         </div>
 
-        <div class="bg-blue-500 relative">
+        <div class="bg-blue-500 relative hidden md:block">
             <img src="{{ asset('assets/img/logo.jpg') }}" alt="Logo InstaWash Laundry" 
                  class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-blue-900 bg-opacity-20"></div>

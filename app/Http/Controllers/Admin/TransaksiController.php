@@ -120,6 +120,15 @@ class TransaksiController extends Controller
     return redirect()->route('admin.transaksi.index')->with('success', 'Transaksi InstaWash berhasil diperbarui!');
 }
 
+    // Invoice Transaksi
+    public function invoice(Transaksi $transaksi)
+    {
+        return view('pages.transaksi.invoice', [
+            'transaksi' => $transaksi,
+            'isPrint' => true // Admin dan Karyawan bisa print
+        ]);
+    }
+
     public function destroy(Transaksi $transaksi)
     {
         $transaksi->delete();

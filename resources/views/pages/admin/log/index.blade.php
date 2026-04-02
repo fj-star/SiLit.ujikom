@@ -3,6 +3,7 @@
 @section('content')
 <div class="card p-4">
     <h4 class="mb-3">Log Aktivitas</h4>
+    <div class="table-responsive">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -31,5 +32,6 @@
             @endforeach
         </tbody>
     </table>
+    </div>
 </div>
 @endsection

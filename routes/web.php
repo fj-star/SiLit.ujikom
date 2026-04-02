@@ -88,6 +88,7 @@ Route::post('/absensi', [AdminAbsensi::class, 'store'])->name('absensi.store');
         Route::resource('pelanggans', AdminPelanggan::class);
         Route::resource('layanans', LayananController::class);
         Route::resource('treatments', TreatmentController::class);
+        Route::get('transaksi/{transaksi}/invoice', [AdminTransaksi::class, 'invoice'])->name('transaksi.invoice');
         Route::resource('transaksi', AdminTransaksi::class);
         Route::resource('karyawan', KaryawanController::class);
 
@@ -131,6 +132,7 @@ Route::prefix('karyawan')
 Route::post('/absensi', [KaryawanAbsensi::class, 'store'])->name('absensi.store');
         Route::get('/dashboard', [KaryawanDashboard::class, 'index'])->name('dashboard');
         Route::put('/transaksi/{transaksi}/konfirmasi-bayar', [KaryawanTransaksi::class, 'konfirmasiBayar'])->name('transaksi.konfirmasi-bayar');
+        Route::get('transaksi/{transaksi}/invoice', [KaryawanTransaksi::class, 'invoice'])->name('transaksi.invoice');
         Route::resource('transaksi', KaryawanTransaksi::class);
         Route::resource('pelanggan', KaryawanPelanggan::class);
     });
@@ -148,8 +150,12 @@ Route::prefix('pelanggan')
     'transaksi/{transaksi}/bayar',
     [PelangganTransaksi::class, 'bayarMidtrans']
 )->name('transaksi.bayar');
+
+        Route::post('transaksi/{transaksi}/force-paid', [PelangganTransaksi::class, 'forcePaid'])->name('transaksi.force_paid');
+
         Route::get('/dashboard', [PelangganDashboard::class, 'index'])->name('dashboard');
 
+        Route::get('transaksi/{transaksi}/invoice', [PelangganTransaksi::class, 'invoice'])->name('transaksi.invoice');
         Route::resource('transaksi', PelangganTransaksi::class);
     });
 

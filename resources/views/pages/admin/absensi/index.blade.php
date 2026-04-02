@@ -46,6 +46,9 @@
                             <a class="nav-link active font-weight-bold" id="hari-ini-tab" data-toggle="tab" href="#hari-ini" role="tab">Monitoring Hari Ini</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link font-weight-bold" id="riwayat-tab" data-toggle="tab" href="#riwayat" role="tab">Riwayat & Rekap</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link font-weight-bold" id="rekap-tab" data-toggle="tab" href="#rekap" role="tab">Input Manual</a>
                         </li>
                     </ul>
@@ -65,7 +68,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($absensis as $a)
+                                        @forelse($absensisHariIni as $a)
                                         <tr>
                                             <td><strong>{{ $a->user->name }}</strong></td>
                                             <td><span class="text-success font-weight-bold">{{ $a->jam_masuk ?? '--:--' }}</span></td>
@@ -98,7 +101,52 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{ $absensis->links() }}
+                            {{ $absensisHariIni->links() }}
+                        </div>
+
+                        <div class="tab-pane fade" id="riwayat" role="tabpanel">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th>Tanggal</th>
+                                            <th>Nama</th>
+                                            <th>Masuk</th>
+                                            <th>Pulang</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($riwayatAbsensis as $a)
+                                        <tr>
+                                            <td><strong>{{ \Carbon\Carbon::parse($a->tanggal)->format('d M Y') }}</strong></td>
+                                            <td><strong>{{ $a->user->name }}</strong></td>
+                                            <td><span class="text-success font-weight-bold">{{ $a->jam_masuk ?? '--:--' }}</span></td>
+                                            <td><span class="text-danger font-weight-bold">{{ $a->jam_keluar ?? '--:--' }}</span></td>
+                                            <td>
+                                                @php
+                                                    $badge = [
+                                                        'hadir' => 'success',
+                                                        'terlambat' => 'warning',
+                                                        'izin' => 'info',
+                                                        'sakit' => 'primary',
+                                                        'alpha' => 'danger'
+                                                    ][$a->status] ?? 'secondary';
+                                                @endphp
+                                                <span class="badge badge-{{ $badge }}">
+                                                    {{ strtoupper($a->status) }}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center text-muted">Belum ada data riwayat absensi.</td>
+                                        </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            {{ $riwayatAbsensis->links() }}
                         </div>
 
                         <div class="tab-pane fade" id="rekap" role="tabpanel">

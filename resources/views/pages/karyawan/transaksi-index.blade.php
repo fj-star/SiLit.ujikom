@@ -7,6 +7,7 @@
             <a href="{{ route('karyawan.transaksi.create') }}" class="btn btn-primary">+ Tambah Transaksi</a>
         </div>
 
+        <div class="table-responsive">
         <table class="table table-bordered table-hover">
             <thead class="bg-light text-center">
                 <tr>
@@ -53,7 +54,7 @@
     <small class="text-muted">({{ strtoupper($t->metode_pembayaran) }})</small>
 </td>
                     <td class="text-center">
-                        
+                        <a href="{{ route('karyawan.transaksi.invoice', $t->id) }}" class="btn btn-sm btn-info" title="Cetak Invoice"><i class="fas fa-print"></i> Cetak</a>
                         <a href="{{ route('karyawan.transaksi.edit',$t->id) }}" class="btn btn-sm btn-warning">Edit</a>
                         <form action="{{ route('karyawan.transaksi.destroy', $t->id) }}" method="POST" class="d-inline">
                             @csrf @method('DELETE')
@@ -64,6 +65,7 @@
                 @endforeach
             </tbody>
         </table>
+        </div>
         {{ $transaksis->links() }}
     </div>
 </div>

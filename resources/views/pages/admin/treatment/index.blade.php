@@ -9,7 +9,8 @@
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
     
-    <table class="table table-bordered table-striped">
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
                 <th>Nama Treatment</th>
@@ -43,5 +44,6 @@
             @endforelse
         </tbody>
     </table>
+    </div>
 </div>
 @endsection

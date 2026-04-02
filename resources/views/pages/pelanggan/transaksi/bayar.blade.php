@@ -39,12 +39,26 @@
         
         snap.pay('{{ $snapToken }}', {
             onSuccess: function(result) {
-                Swal.fire({
-                    title: 'Pembayaran Berhasil!',
-                    text: 'Terima kasih sudah membayar dan menggunakan layanan InstaWash kami!',
-                    icon: 'success',
-                    confirmButtonText: 'Tutup'
-                }).then((result) => {
+                // BYPASS NGROK: Panggil route backend secara manual untuk update status ke paid
+                fetch("{{ route('pelanggan.transaksi.force_paid', $transaksi->id) }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }).then(response => response.json())
+                .then(data => {
+                    Swal.fire({
+                        title: 'Pembayaran Berhasil!',
+                        text: 'Terima kasih sudah membayar dan menggunakan layanan InstaWash kami!',
+                        icon: 'success',
+                        confirmButtonText: 'Tutup'
+                    }).then((result) => {
+                        window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                    });
+                }).catch(error => {
+                    console.error('Error:', error);
                     window.location.href = "{{ route('pelanggan.transaksi.index') }}";
                 });
             },

@@ -26,11 +26,13 @@
                 <span class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-400 tracking-tight">InstaWash</span>
             </div>
             
-            <div class="hidden md:flex items-center space-x-10">
-                <a href="#about" class="text-sm font-semibold hover:text-blue-600 transition-colors">Tentang Kami</a>
-                <a href="#layanan" class="text-sm font-semibold hover:text-blue-600 transition-colors">Layanan</a>
-                <a href="#testimonials" class="text-sm font-semibold hover:text-blue-600 transition-colors">Testimoni</a>
-                <a href="{{ route('login') }}" class="bg-blue-600 text-white px-7 py-2.5 rounded-full text-sm font-bold hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition-all active:scale-95">Login</a>
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="#about" class="text-sm font-semibold hover:text-blue-600 transition-colors">Tentang Kami</a>
+                    <a href="#layanan" class="text-sm font-semibold hover:text-blue-600 transition-colors">Layanan</a>
+                    <a href="#testimonials" class="text-sm font-semibold hover:text-blue-600 transition-colors">Testimoni</a>
+                </div>
+                <a href="{{ route('login') }}" class="bg-blue-600 text-white px-5 py-2 md:px-7 md:py-2.5 rounded-full text-sm font-bold hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition-all active:scale-95">Login</a>
             </div>
         </div>
     </nav>
