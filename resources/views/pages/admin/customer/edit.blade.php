@@ -45,6 +45,14 @@
                    value="{{ old('no_hp', $pelanggan->no_hp) }}">
         </div>
 
+        {{-- Password Baru --}}
+        <div class="mb-4 p-3 border rounded border-warning bg-light">
+            <label class="text-warning font-weight-bold"><i class="fas fa-key"></i> Ganti Password (Opsional)</label>
+            <input type="password" name="password" class="form-control" placeholder="Kosongkan jika tidak ingin ganti password">
+            <small class="text-muted">Hanya diisi jika pelanggan lupa password dan minta di-reset.</small>
+            @error('password') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
+        </div>
+
         <button type="submit" class="btn btn-primary">Update</button>
         <a href="{{ route('admin.pelanggans.index') }}" class="btn btn-secondary">Batal</a>
     </form>

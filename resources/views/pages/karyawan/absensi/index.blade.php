@@ -12,11 +12,16 @@
                     @if(!$sudah_absen || ($sudah_absen && !$sudah_absen->jam_keluar))
                         <div class="py-4">
                             <i class="fas fa-fingerprint text-primary fa-5x mb-4"></i>
-                            <h5 class="font-weight-bold mb-3">Tekan Tombol di Bawah Untuk Presensi</h5>
+                            <h5 class="font-weight-bold mb-3">Pilih Metode Presensi</h5>
+                            
+                            <button type="button" class="btn btn-info btn-lg btn-block shadow-sm mb-3" data-toggle="modal" data-target="#qrScannerModal">
+                                <i class="fas fa-qrcode mr-2"></i> Tampilkan QR Code Saya
+                            </button>
+
                             <form id="form-absen" action="{{ route('karyawan.absensi.store') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-primary btn-lg btn-block shadow-sm">
-                                    <i class="fas fa-check-circle mr-2"></i> Hadir / Pulang Sekarang
+                                <button type="submit" class="btn btn-outline-primary btn-lg btn-block shadow-sm">
+                                    <i class="fas fa-hand-pointer mr-2"></i> Absen Manual (Tombol)
                                 </button>
                             </form>
                         </div>
@@ -92,4 +97,22 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="qrScannerModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title font-weight-bold text-primary"><i class="fas fa-qrcode mr-2"></i>QR Code Presensi Anda</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center pt-0">
+        <p class="text-muted small mb-3">Tunjukkan QR Code ini ke Webcam Admin InstaWash.</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data={{ auth()->user()->id }}" alt="QR Karyawan" class="img-fluid border shadow-sm p-2 mb-3">
+        <h5 class="font-weight-bold">{{ auth()->user()->name }}</h5>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection

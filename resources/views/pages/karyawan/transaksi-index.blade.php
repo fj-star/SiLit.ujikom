@@ -54,12 +54,14 @@
     <small class="text-muted">({{ strtoupper($t->metode_pembayaran) }})</small>
 </td>
                     <td class="text-center">
-                        <a href="{{ route('karyawan.transaksi.invoice', $t->id) }}" class="btn btn-sm btn-info" title="Cetak Invoice"><i class="fas fa-print"></i> Cetak</a>
-                        <a href="{{ route('karyawan.transaksi.edit',$t->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="{{ route('karyawan.transaksi.destroy', $t->id) }}" method="POST" class="d-inline">
-                            @csrf @method('DELETE')
-                            <button class="btn btn-sm btn-danger" onclick="return confirm('Hapus?')">Hapus</button>
-                        </form>
+                        <div class="d-flex justify-content-center align-items-center" style="gap: 5px; flex-wrap: nowrap;">
+                            <a href="{{ route('karyawan.transaksi.invoice', $t->id) }}" class="btn btn-sm btn-info" title="Cetak Invoice"><i class="fas fa-print"></i></a>
+                            <a href="{{ route('karyawan.transaksi.edit',$t->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+                            <form action="{{ route('karyawan.transaksi.destroy', $t->id) }}" method="POST" class="m-0 p-0">
+                                @csrf @method('DELETE')
+                                <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 @endforeach

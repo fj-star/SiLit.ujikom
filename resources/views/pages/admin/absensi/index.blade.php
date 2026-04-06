@@ -52,6 +52,12 @@
                             <a class="nav-link font-weight-bold" id="rekap-tab" data-toggle="tab" href="#rekap" role="tab">Input Manual</a>
                         </li>
                     </ul>
+                    <a href="{{ route('admin.jam_kerja.index') }}" class="btn btn-sm btn-primary mt-2 mt-md-0 position-absolute" style="right: 1.25rem; top: 10px;">
+                        <i class="fas fa-clock"></i> Atur Jam Kerja
+                    </a>
+                    <button type="button" class="btn btn-sm btn-info mt-2 mt-md-0 position-absolute" style="right: 10rem; top: 10px;" data-toggle="modal" data-target="#qrKioskModal">
+                        <i class="fas fa-camera"></i> Kiosk Scanner
+                    </button>
                 </div>
                 <div class="card-body">
                     <div class="tab-content" id="absensiTabContent">
@@ -220,4 +226,166 @@
     }
     setInterval(updateStats, 5000);
 </script>
+<div class="modal fade" id="qrKioskModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title font-weight-bold text-primary"><i class="fas fa-camera mr-2"></i>Kiosk Absensi InstaWash</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="stopScanner()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center pt-0">
+        <p class="text-muted small mb-3">Arahkan QR Code karyawan ke kamera laptop ATAU gunakan Barcode Scanner fisik.</p>
+        
+        <!-- Input rahasia/fisik untuk Honeywell Scanner -->
+        <input type="text" id="honeywell-input" class="form-control text-center font-weight-bold shadow-sm mb-3" placeholder="[Kursor Disini] Scan via Honeywell..." style="border: 2px dashed #4e73df; color: #4e73df;" autocomplete="off">
+
+        <div id="reader" style="width: 100%; border-radius: 10px; overflow: hidden; border: 2px solid #4e73df;"></div>
+        <div id="kiosk-status" class="mt-3 font-weight-bold" style="font-size: 1.2rem;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script>
+    let html5QrcodeScanner = null;
+    let isProcessing = false;
+    const synth = window.speechSynthesis;
+
+    function speak(text) {
+        if (synth) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            utterance.rate = 0.9;
+            synth.speak(utterance);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof $ !== 'undefined') {
+            $('#qrKioskModal').on('shown.bs.modal', function () {
+                document.getElementById('kiosk-status').innerText = "";
+                document.getElementById('kiosk-status').className = "mt-3 font-weight-bold";
+                isProcessing = false;
+
+                // Fokuskan input untuk input fisik Honeywell
+                let hwInput = document.getElementById('honeywell-input');
+                hwInput.value = '';
+                hwInput.focus();
+
+                // Paksa agar input terus menerus fokus, jaga-jaga kalau focusnya hilang dicolong elemen lain
+                let keepFocusInterval = setInterval(function() {
+                    if ($('#qrKioskModal').is(':visible')) {
+                        hwInput.focus();
+                    } else {
+                        clearInterval(keepFocusInterval);
+                    }
+                }, 500); // Tiap 0.5 detik balikan focus
+
+                // Render Kamera HANYA jika Browser memberikan izin (Secure Context = localhost / HTTPS)
+                if (window.isSecureContext) {
+                    html5QrcodeScanner = new Html5QrcodeScanner(
+                        "reader", { fps: 10, qrbox: {width: 250, height: 250} }, false);
+                    html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+                } else {
+                    document.getElementById('reader').innerHTML = `
+                        <div class="p-3 text-danger">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-2"></i><br>
+                            Browser memblokir Kamera karena diakses lewat IP Jaringan (bukan localhost/HTTPS).<br>
+                            <b>Pastikan PC Admin mengakses lewat <code>http://localhost:2007</code> jika ingin menggunakan webcam.</b><br>
+                            Saat ini Anda hanya bisa pakai Barcode Scanner Fisik.
+                        </div>
+                    `;
+                }
+            });
+
+            $('#qrKioskModal').on('hidden.bs.modal', function () {
+                stopScanner();
+            });
+
+            // Deteksi input dari scanner fisik Honeywell (yang nge-trigger Enter alias keyCode=13)
+            $('#honeywell-input').on('keypress', function(e) {
+                if (e.which === 13 || e.keyCode === 13) {
+                    e.preventDefault();
+                    let decodedText = $(this).val().trim();
+                    if(decodedText !== '') {
+                        $(this).val('');
+                        onScanSuccess(decodedText, null);
+                    }
+                }
+            });
+        }
+    });
+
+    function onScanSuccess(decodedText, decodedResult) {
+        if(isProcessing) return;
+        isProcessing = true;
+        
+        let statusEl = document.getElementById('kiosk-status');
+        statusEl.innerText = "Memproses...";
+        statusEl.className = "mt-3 font-weight-bold text-info";
+
+        fetch("{{ route('admin.absensi.scan_proses') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ user_id: decodedText })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                let greeting = data.message;
+                let theMsg = `Terima kasih! Selamat datang, ${data.name}!`;
+                if(data.type === 'pulang') {
+                    theMsg = `Terima kasih! Hati hati di jalan, ${data.name}!`;
+                }
+
+                statusEl.innerText = data.message + ". " + theMsg;
+                statusEl.className = "mt-3 font-weight-bold text-success";
+                
+                speak(theMsg);
+                
+                setTimeout(() => {
+                    isProcessing = false;
+                    statusEl.innerText = "Siap scan berikutnya...";
+                    statusEl.className = "mt-3 font-weight-bold text-muted";
+                }, 4000);
+            } else {
+                statusEl.innerText = data.message;
+                statusEl.className = "mt-3 font-weight-bold text-danger";
+                speak("Mohon maaf. " + data.message);
+                
+                setTimeout(() => {
+                    isProcessing = false;
+                }, 3000);
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            statusEl.innerText = "Terjadi kesalahan sistem.";
+            statusEl.className = "mt-3 font-weight-bold text-danger";
+            setTimeout(() => { isProcessing = false; }, 3000);
+        });
+    }
+
+    function onScanFailure(error) {
+        // Mute errors
+    }
+
+    function stopScanner() {
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.clear().catch(error => {
+                console.error("Gagal clear scanner.", error);
+            });
+            html5QrcodeScanner = null;
+        }
+        window.location.reload();
+    }
+</script>
+
 @endsection

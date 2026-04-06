@@ -98,28 +98,3 @@
         </div>
     </div>
 @endsection
-
-@section('scripts')
-<script>
-    $(document).ready(function() {
-        $('.delete-form').on('submit', function(e) {
-            e.preventDefault();
-            
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Data laporan ini akan dihapus!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.submit();
-                }
-            });
-        });
-    });
-</script>
-@endsection

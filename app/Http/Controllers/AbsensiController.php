@@ -39,7 +39,9 @@ class AbsensiController extends Controller
 
     if (!$absen) {
         // --- JIKA BELUM ADA DATA = ABSEN MASUK ---
-        $batasMasuk = \Carbon\Carbon::createFromTimeString('08:00:00');
+        $jamKerjaConfig = \App\Models\JamKerja::first();
+        $batasText = $jamKerjaConfig ? $jamKerjaConfig->jam_masuk : '08:00:00';
+        $batasMasuk = \Carbon\Carbon::createFromTimeString($batasText);
         $status = $now->gt($batasMasuk) ? 'terlambat' : 'hadir';
 
         Absensi::create([
@@ -59,6 +61,15 @@ class AbsensiController extends Controller
             return redirect()->route('karyawan.absensi.index')->with('info', 'Tuan sudah menyelesaikan tugas hari ini.');
         }
 
+        // 2. Cek apakah sudah waktunya pulang
+        $jamKerjaConfig = \App\Models\JamKerja::first();
+        $batasPulangText = $jamKerjaConfig ? $jamKerjaConfig->jam_pulang : '17:00:00';
+        $batasPulang = \Carbon\Carbon::createFromTimeString($batasPulangText);
+
+        if ($now->lt($batasPulang)) {
+            return redirect()->route('karyawan.absensi.index')->with('error', 'Anda belum bisa melakukan absen pulang. Terima kasih, tetap kerja semangat!');
+        }
+
         // 2. Update jam keluar
         $absen->update([
             'jam_keluar' => $timeString
@@ -67,4 +78,12 @@ class AbsensiController extends Controller
         return redirect()->route('karyawan.absensi.index')->with('success', 'Berhasil Absen PULANG jam ' . $timeString . '. Hati-hati di jalan Tuan!');
     }
 }
+
+    // Fitur QR Scan Otomatis (melalui GET request dari scan Kamera HP)
+    public function qrScan(Request $request)
+    {
+        // Panggil aja method store secara otomatis, jadi satu arah logika.
+        // Kita gunakan method store untuk langsung memproses absensi.
+        return $this->store($request);
+    }
 }

@@ -43,10 +43,10 @@
                         <td class="text-center">
                             <a href="{{ route('karyawan.pelanggan.edit',$p->id) }}" class="btn btn-sm btn-warning shadow-sm"><i class="fas fa-edit"></i></a>
                             
-                            <form action="{{ route('karyawan.pelanggan.destroy',$p->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin hapus pelanggan ini?')">
+                            <form action="{{ route('karyawan.pelanggan.destroy',$p->id) }}" method="POST" class="d-inline delete-form">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-danger shadow-sm"><i class="fas fa-trash"></i></button>
+                                <button type="button" class="btn btn-sm btn-danger shadow-sm btn-delete"><i class="fas fa-trash"></i></button>
                             </form>
                         </td>
                     </tr>

@@ -66,14 +66,22 @@ class PelangganController extends Controller
             'alamat' => 'nullable|string',
             'no_hp' => 'nullable|string|max:15',
             'ttl' => 'nullable|date',
+            'password' => 'nullable|string|min:8',
         ]);
 
         // Update tabel users
-        $pelanggan->user->update([
+        $userData = [
             'name' => $request->nama,
             'email' => $request->email,
             'no_hp' => $request->no_hp
-        ]);
+        ];
+
+        // Jika form password diisi, update passwordnya
+        if ($request->filled('password')) {
+            $userData['password'] = Hash::make($request->password);
+        }
+
+        $pelanggan->user->update($userData);
 
         // Update tabel pelanggans
         $pelanggan->update([

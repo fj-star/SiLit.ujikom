@@ -32,9 +32,24 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@php
+    $role = auth()->user()->role;
+    if($role === 'karyawan') {
+        $redirectUrl = route('karyawan.transaksi.index');
+        $successMsg = 'Terima kasih Bapak/Ibu Kasir sudah membantu transaksi pelanggan!';
+    } else if($role === 'admin') {
+        $redirectUrl = route('admin.transaksi.index');
+        $successMsg = 'Terima kasih Admin, transaksi pelanggan berhasil dibantu!';
+    } else {
+        $redirectUrl = route('pelanggan.transaksi.index');
+        $successMsg = 'Terima kasih sudah membayar dan menggunakan layanan InstaWash kami!';
+    }
+@endphp
+
 <script>
     const payButton = document.getElementById('pay-button');
-    payButton.onclick = function (e) {
+    payButton.onclick = function(e) {
         e.preventDefault();
         
         snap.pay('{{ $snapToken }}', {
@@ -51,20 +66,20 @@
                 .then(data => {
                     Swal.fire({
                         title: 'Pembayaran Berhasil!',
-                        text: 'Terima kasih sudah membayar dan menggunakan layanan InstaWash kami!',
+                        text: '{{ $successMsg }}',
                         icon: 'success',
                         confirmButtonText: 'Tutup'
                     }).then((result) => {
-                        window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                        window.location.href = "{!! $redirectUrl !!}";
                     });
                 }).catch(error => {
                     console.error('Error:', error);
-                    window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                    window.location.href = "{!! $redirectUrl !!}";
                 });
             },
             onPending: function(result) {
-                Swal.fire('Menunggu Pembayaran', 'Silakan cek email atau aplikasi e-wallet Anda.', 'info').then(() => {
-                    window.location.href = "{{ route('pelanggan.transaksi.index') }}";
+                Swal.fire('Menunggu Pembayaran', 'Silakan selesaikan pembayaran.', 'info').then(() => {
+                    window.location.href = "{!! $redirectUrl !!}";
                 });
             },
             onError: function(result) {

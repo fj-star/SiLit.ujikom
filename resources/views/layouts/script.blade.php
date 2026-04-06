@@ -57,6 +57,32 @@
         }
         
         /**
+         * 🗑️ Konfirmasi Global Hapus Data
+         */
+        document.body.addEventListener('click', function(e) {
+            const deleteBtn = e.target.closest('.btn-delete');
+            if (deleteBtn) {
+                e.preventDefault();
+                const form = deleteBtn.closest('form');
+                
+                Swal.fire({
+                    title: 'Apakah Anda Yakin?',
+                    text: 'Data yang dihapus tidak akan dapat dikembalikan!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if(form) form.submit();
+                    }
+                });
+            }
+        });
+        
+        /**
      * ✅ Alert Sukses dari Session
      */
     @if(session('success'))

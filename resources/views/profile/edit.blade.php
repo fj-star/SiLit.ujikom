@@ -49,6 +49,14 @@
                             </button>
                         </div>
                     @endif
+                    @if (session('status') === 'password-updated')
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            Password barumu sudah aktif! Pastikan nggak lupa ya. 🔐
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
 
                     <form method="POST" action="{{ route('profile.update') }}">
                         @csrf
@@ -96,15 +104,48 @@
                 </div>
             </div>
 
-            <div class="card shadow mb-4 border-left-danger">
+            <div class="card shadow mb-4 border-left-danger" id="update-password">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-danger">Keamanan Akun (Ganti Password)</h6>
+                </div>
                 <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <h6 class="m-0 font-weight-bold text-danger">Keamanan Akun</h6>
-                            <p class="text-muted small mb-0">Disarankan ganti password secara berkala biar aman bray.</p>
+                    <p class="text-muted small mb-4">Disarankan menggunakan minimal 8 karakter dengan kombinasi huruf dan angka.</p>
+
+                    <form method="POST" action="{{ route('password.update') }}">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="mb-3">
+                            <label class="font-weight-bold small">Password Saat Ini</label>
+                            <input type="password" name="current_password" class="form-control @error('current_password', 'updatePassword') is-invalid @enderror shadow-sm" required>
+                            @error('current_password', 'updatePassword') 
+                                <div class="invalid-feedback">{{ $message }}</div> 
+                            @enderror
                         </div>
-                        <a href="{{ route('profile.edit') }}#update-password" class="btn btn-outline-danger btn-sm">Ganti Password</a>
-                    </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="font-weight-bold small">Password Baru</label>
+                                <input type="password" name="password" class="form-control @error('password', 'updatePassword') is-invalid @enderror shadow-sm" required autocomplete="new-password">
+                                @error('password', 'updatePassword') 
+                                    <div class="invalid-feedback">{{ $message }}</div> 
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="font-weight-bold small">Konfirmasi Password</label>
+                                <input type="password" name="password_confirmation" class="form-control @error('password_confirmation', 'updatePassword') is-invalid @enderror shadow-sm" required autocomplete="new-password">
+                                @error('password_confirmation', 'updatePassword')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="text-right mt-3">
+                            <button type="submit" class="btn btn-danger px-4 shadow">
+                                <i class="fas fa-key mr-1"></i> Ganti Password
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

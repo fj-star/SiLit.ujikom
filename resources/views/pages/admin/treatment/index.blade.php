@@ -34,7 +34,7 @@
                             <form action="{{ route('admin.treatments.destroy', $treatment) }}" method="POST" class="d-inline delete-form" >
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-danger btn-sm">Hapus</button>
+                                <button type="button" class="btn btn-danger btn-sm btn-delete">Hapus</button>
                             </form>
                         </div>
                     </td>

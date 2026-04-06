@@ -25,13 +25,19 @@ class AbsensiController extends Controller
             'izin'           => Absensi::where('tanggal', $today)->whereIn('status', ['izin', 'sakit', 'alpha'])->count(),
         ];
 
-        // 2. Ambil Data Tabel (Hanya untuk Hari Ini agar Tab 'Monitoring Hari Ini' Akurat)
-        $absensis = Absensi::with('user')
+        // 2. Ambil Data Tabel Hari Ini
+        $absensisHariIni = Absensi::with('user')
                     ->where('tanggal', $today)
                     ->latest()
-                    ->paginate(20);
+                    ->paginate(10, ['*'], 'page_hari_ini');
 
-        return view('pages.admin.absensi.index', compact('absensis', 'stats'));
+        // 3. Ambil Data Riwayat
+        $riwayatAbsensis = Absensi::with('user')
+                    ->where('tanggal', '!=', $today)
+                    ->latest()
+                    ->paginate(20, ['*'], 'page_riwayat');
+
+        return view('pages.admin.absensi.index', compact('absensisHariIni', 'riwayatAbsensis', 'stats'));
     }
 
     public function edit($id)
@@ -104,4 +110,83 @@ class AbsensiController extends Controller
         'izin'           => \App\Models\Absensi::where('tanggal', $today)->whereIn('status', ['izin', 'sakit', 'alpha'])->count(),
     ]);
 }
+
+    // Fitur QR Scan lewat Kiosk Admin
+    public function scanProses(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id'
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+        if ($user->role !== 'karyawan') {
+            return response()->json(['success' => false, 'message' => 'Gagal: QR Bukan Karyawan!']);
+        }
+
+        $now = \Carbon\Carbon::now();
+        $today = $now->toDateString();
+        $timeString = $now->toTimeString();
+
+        $absen = Absensi::where('user_id', $user->id)->where('tanggal', $today)->first();
+
+        if (!$absen) {
+            $jamKerjaConfig = \App\Models\JamKerja::first();
+            $batasText = $jamKerjaConfig ? $jamKerjaConfig->jam_masuk : '08:00:00';
+            $toleransi = $jamKerjaConfig ? $jamKerjaConfig->menit_toleransi : 0;
+            
+            $batasMasuk = \Carbon\Carbon::createFromTimeString($batasText);
+            $batasToleransi = $batasMasuk->copy()->addMinutes($toleransi);
+
+            if ($now->gt($batasToleransi)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal! Waktu keterlambatan melampaui batas toleransi (' . $toleransi . ' menit).'
+                ]);
+            }
+
+            $status = $now->gt($batasMasuk) ? 'terlambat' : 'hadir';
+
+            Absensi::create([
+                'user_id'   => $user->id,
+                'tanggal'   => $today,
+                'jam_masuk' => $timeString,
+                'status'    => $status
+            ]);
+
+            return response()->json([
+                'success' => true, 
+                'type' => 'masuk',
+                'name' => $user->name,
+                'message' => 'Berhasil Hadir jam ' . $timeString
+            ]);
+
+        } else {
+            if ($absen->jam_keluar) {
+                return response()->json([
+                    'success' => false, 
+                    'message' => 'Karyawan sudah absen keluar.'
+                ]);
+            }
+
+            $jamKerjaConfig = \App\Models\JamKerja::first();
+            $batasPulangText = $jamKerjaConfig ? $jamKerjaConfig->jam_pulang : '17:00:00';
+            $batasPulang = \Carbon\Carbon::createFromTimeString($batasPulangText);
+
+            if ($now->lt($batasPulang)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Anda belum bisa melakukan scan pulang, terima kasih tetap kerja semangat!'
+                ]);
+            }
+
+            $absen->update(['jam_keluar' => $timeString]);
+
+            return response()->json([
+                'success' => true, 
+                'type' => 'pulang',
+                'name' => $user->name,
+                'message' => 'Berhasil Pulang jam ' . $timeString
+            ]);
+        }
+    }
 }

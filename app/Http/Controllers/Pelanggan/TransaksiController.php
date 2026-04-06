@@ -16,7 +16,7 @@ class TransaksiController extends Controller
     public function index()
     {
         $transaksis = Transaksi::with(['layanan','treatment'])
-            ->where('user_id', auth()->id())
+            ->where('user_id', auth()->id()) // SEKARANG PELANGGAN BISA MELIHAT TRANSAKSI MEREKA
             ->latest()
             ->get();
 
@@ -69,34 +69,43 @@ class TransaksiController extends Controller
     /* ================= MIDTRANS ================= */
 
     public function bayarMidtrans(Transaksi $transaksi)
-{
-    abort_if($transaksi->user_id !== auth()->id(), 403);
+    {
+        $user = auth()->user();
+        // IZINKAN pembayaran jika dia Kasir/Admin, ATAU jika dia adalah PELANGGAN pemilik nota ini
+        abort_if($user->role === 'pelanggan' && $transaksi->user_id !== $user->id, 403);
 
-    if ($transaksi->payment_status === 'paid') {
-        return redirect()->route('pelanggan.transaksi.index')->with('success', 'Transaksi sudah lunas');
-    }
+        if ($transaksi->payment_status === 'paid') {
+            return redirect()->back()->with('success', 'Transaksi sudah lunas');
+        }
 
-    \App\Services\MidtransService::init();
+        \App\Services\MidtransService::init();
 
-    // SUPAYA TIDAK ERROR 400: Kita buat Order ID yang selalu unik tiap kali mau bayar
-    // Tapi kita simpan di kolom order_id supaya bisa dilacak saat callback
-    $newOrderId = 'INSTA-' . $transaksi->id . '-' . time();
-    
-    // Kita generate Snap Token baru setiap kali masuk halaman ini biar fresh
-    try {
-        $snapToken = \Midtrans\Snap::getSnapToken([
-            'transaction_details' => [
-                'order_id'     => $newOrderId,
-                'gross_amount' => (int) $transaksi->total_harga,
-            ],
-            'customer_details' => [
-                'first_name' => auth()->user()->name,
-                'email'      => auth()->user()->email,
-            ],
-        ]);
+        $newOrderId = 'INSTA-' . $transaksi->id . '-' . time();
+        
+        // user_id menyimpan ID pelanggan di aplikasi ini
+        $pelanggan = \App\Models\User::find($transaksi->user_id);
 
-        // Update database dengan Order ID terbaru dan Token baru
-        $transaksi->update([
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken([
+                'transaction_details' => [
+                    'order_id'     => $newOrderId,
+                    'gross_amount' => (int) $transaksi->total_harga,
+                ],
+                'customer_details' => [
+                    'first_name' => $pelanggan ? $pelanggan->name : 'Walk-in Customer',
+                    'email'      => $pelanggan ? $pelanggan->email : 'customer@instawash.com',
+                ],
+                
+                // 👇 CONTOH JIKA INGIN MEMBATASI HANYA BCA VIRTUAL ACCOUNT
+                /*
+                'enabled_payments' => [
+                    'bca_va'
+                ],
+                */
+            ]);
+
+            // Update database dengan Order ID terbaru dan Token baru
+            $transaksi->update([
             'order_id'   => $newOrderId,
             'snap_token' => $snapToken
         ]);
@@ -114,7 +123,8 @@ class TransaksiController extends Controller
     // BYPASS UNTUK DEVELOPMENT LOCAL TANPA NGROK
     public function forcePaid(Transaksi $transaksi)
     {
-        abort_if($transaksi->user_id !== auth()->id(), 403);
+        $user = auth()->user();
+        abort_if($user->role === 'pelanggan' && $transaksi->user_id !== $user->id, 403);
         $transaksi->update(['payment_status' => 'paid']);
         return response()->json(['success' => true, 'message' => 'Status forced to paid']);
     }

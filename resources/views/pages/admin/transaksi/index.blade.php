@@ -53,12 +53,14 @@
                                 </span>
                             </td>
                             <td class="text-center">
-                                <a href="{{ route('admin.transaksi.invoice', $transaksi->id) }}" class="btn btn-info btn-sm" title="Cetak Invoice"><i class="fas fa-print"></i></a>
-                                <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}" method="POST" class="d-inline">
-                                    @csrf @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" onclick="return confirm('Hapus transaksi ini?')"><i class="fas fa-trash"></i></button>
-                                </form>
+                                <div class="d-flex justify-content-center align-items-center" style="gap: 5px; flex-wrap: nowrap;">
+                                    <a href="{{ route('admin.transaksi.invoice', $transaksi->id) }}" class="btn btn-info btn-sm" title="Cetak Invoice"><i class="fas fa-print"></i></a>
+                                    <a href="{{ route('admin.transaksi.edit', $transaksi->id) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
+                                    <form action="{{ route('admin.transaksi.destroy', $transaksi->id) }}" method="POST" class="m-0 p-0">
+                                        @csrf @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm btn-delete"><i class="fas fa-trash"></i></button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @empty
