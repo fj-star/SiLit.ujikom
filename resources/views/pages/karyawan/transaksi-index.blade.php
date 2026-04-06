@@ -14,6 +14,8 @@
                     <th>no</th>
                     <th>Pelanggan</th>
                     <th>Layanan</th>
+                    <th>Treatment</th>
+                    <th>Diskon</th>
                     <th>Berat</th>
                     <th>Total</th>
                     <th>Pembayaran</th>
@@ -25,8 +27,30 @@
                 @foreach($transaksis as $t)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $t->user->name }}</td>
+                    <td>
+                        @if($t->pelanggan)
+                            {{ $t->pelanggan->name }}
+                        @elseif($t->nama_tamu)
+                            {{ $t->nama_tamu }} <span class="badge bg-secondary" style="font-size:9px">tamu</span>
+                        @else
+                            <span class="text-muted">Guest</span>
+                        @endif
+                    </td>
                     <td>{{ $t->layanan->nama_layanan ?? '-' }}</td>
+                    <td>
+                        @if($t->treatment)
+                            <span class="badge bg-info">{{ $t->treatment->nama_treatment }}</span>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if($t->treatment && $t->treatment->diskon > 0)
+                            <span class="badge bg-warning text-dark">{{ $t->treatment->diskon }}%</span>
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
+                    </td>
                     <td>{{ $t->berat }} Kg</td>
                     <td>Rp {{ number_format($t->total_harga) }}</td>
                     <td class="text-center">

@@ -33,13 +33,16 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id'           => 'required|exists:users,id',
+            'pelanggan_id'      => 'nullable|exists:users,id',
+            'nama_tamu'         => 'nullable|string|max:255',
+            'kontak_tamu'       => 'nullable|string|max:255',
             'layanan_id'        => 'required|exists:layanans,id',
             'treatment_id'      => 'nullable|exists:treatments,id',
             'berat'             => 'required|numeric|min:0.1',
             'metode_pembayaran' => 'required|in:cash,midtrans',
         ]);
 
+        $data['user_id']        = auth()->id();
         $data['order_id']       = 'INV-' . strtoupper(uniqid());
         $data['created_by']     = 'karyawan';
         $data['status']         = 'pending';

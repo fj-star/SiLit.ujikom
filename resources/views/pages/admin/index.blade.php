@@ -47,7 +47,7 @@
 
                         <h1 class="h3 mb-0">Selamat Datang, {{ auth()->user()->name }}!</h1>
                     </marquee>
-                    <p class="lead mb-0">Dashboard Admin Silit Laundry</p>
+                    <p class="lead mb-0">Dashboard Admin InstaWash</p>
                 </div>
             </div>
         </div>

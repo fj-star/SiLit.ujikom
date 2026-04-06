@@ -19,6 +19,7 @@
                 <div class="col-md-6">
                     <button type="submit" class="btn btn-primary px-4">Filter</button>
                     <a href="{{ route('owner.laporan.pdf', ['from' => $from, 'to' => $to]) }}" class="btn btn-danger">Export PDF</a>
+                    <a href="{{ route('owner.laporan.csv', ['from' => $from, 'to' => $to]) }}" class="btn btn-success">Export Excel (CSV)</a>
                 </div>
             </form>
         </div>

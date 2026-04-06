@@ -41,8 +41,22 @@
             </div>
             <div class="flex justify-between mb-1">
                 <span>Pelanggan:</span>
-                <span class="font-bold">{{ $transaksi->user->name }}</span>
+                <span class="font-bold">
+                    @if($transaksi->pelanggan)
+                        {{ $transaksi->pelanggan->name }}
+                    @elseif($transaksi->nama_tamu)
+                        {{ $transaksi->nama_tamu }} <small class="text-gray-400">(tamu)</small>
+                    @else
+                        Guest
+                    @endif
+                </span>
             </div>
+            @if(!$transaksi->pelanggan && $transaksi->kontak_tamu)
+            <div class="flex justify-between mb-1">
+                <span>Kontak Tamu:</span>
+                <span class="font-bold text-blue-600">{{ $transaksi->kontak_tamu }}</span>
+            </div>
+            @endif
             <div class="flex justify-between mb-1">
                 <span>Kasir/Admin:</span>
                 <span>{{ ucfirst($transaksi->created_by ?? 'Sistem') }}</span>

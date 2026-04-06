@@ -98,6 +98,12 @@
                 <span>Karyawan</span>
             </a>
         </li>
+        <li class="nav-item {{ Request::is('admin/gaji*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.gaji.index') }}">
+                <i class="fas fa-fw fa-money-bill-wave"></i>
+                <span>Gaji Karyawan</span>
+            </a>
+        </li>
 
     @elseif($role === 'karyawan')
         {{-- Menu Karyawan --}}
@@ -119,6 +125,30 @@
                 <span>Transaksi</span>
             </a>
         </li>
+        <li class="nav-item {{ Request::is('karyawan/layanans*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('karyawan.layanans.index') }}">
+                <i class="fas fa-fw fa-box"></i>
+                <span>Layanan</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Request::is('karyawan/treatments*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('karyawan.treatments.index') }}">
+                <i class="fas fa-fw fa-star"></i>
+                <span>Treatment</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Request::is('karyawan/pelanggan*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('karyawan.pelanggan.index') }}">
+                <i class="fas fa-fw fa-users"></i>
+                <span>Data Pelanggan</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Request::is('karyawan/gaji*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('karyawan.gaji.index') }}">
+                <i class="fas fa-fw fa-wallet"></i>
+                <span>Gaji Saya</span>
+            </a>
+        </li>
 
     @elseif($role === 'owner')
         {{-- Menu Owner --}}
@@ -128,10 +158,16 @@
                 <span>Dashboard</span>
             </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item {{ Request::is('owner/laporan*') ? 'active' : '' }}">
             <a class="nav-link" href="{{ route('owner.laporan.index') }}">
                 <i class="fas fa-fw fa-file-invoice"></i>
                 <span>Laporan</span>
+            </a>
+        </li>
+        <li class="nav-item {{ Request::is('owner/karyawan*') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('owner.karyawan.index') }}">
+                <i class="fas fa-fw fa-user-tie"></i>
+                <span>Data Karyawan</span>
             </a>
         </li>
 

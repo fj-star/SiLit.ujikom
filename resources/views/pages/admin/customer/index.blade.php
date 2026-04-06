@@ -41,18 +41,21 @@
                             <td>{{ $pelanggan->no_hp }}</td>
                             <td>{{ $pelanggan->alamat }}</td>
                             <td>{{ $pelanggan->ttl }}</td>
-                            <td>
-                                <a href="{{ route('admin.pelanggans.edit', $pelanggan->id) }}" 
-                                   class="btn btn-warning btn-sm">Edit</a>
-
-                                <form action="{{ route('admin.pelanggans.destroy', $pelanggan->id) }}" 
-                                      method="POST" class="d-inline delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="sumbit" class="btn btn-danger btn-sm btn-delete">
-                                        Hapus
-                                    </button>
-                                </form>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a href="{{ route('admin.pelanggans.edit', $pelanggan->id) }}"
+                                       class="btn btn-sm btn-warning">
+                                       <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form action="{{ route('admin.pelanggans.destroy', $pelanggan->id) }}"
+                                          method="POST" class="d-inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger btn-delete">
+                                            <i class="fas fa-trash"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

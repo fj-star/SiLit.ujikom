@@ -10,34 +10,32 @@ class AdminUserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Fazril',
-            'email' => 'admin@gmail.com',
-            'no_hp' => '0239201392',
-            'ttl' => '10-03-2007',
-            'alamat'=>'cianjur',
+        User::firstOrCreate(['email' => 'admin@gmail.com'], [
+            'name'     => 'Fazril',
+            'no_hp'    => '0239201392',
+            'ttl'      => '2007-03-10',
+            'alamat'   => 'cianjur',
             'password' => Hash::make('12345678'),
-            'role' => 'admin'
+            'role'     => 'admin',
         ]);
-        User::create([
-        'name' => 'Boss deng',
-        'email' => 'owner@gmail.com',
-        'no_hp' => '023920138',
-        'ttl' => '10-03-2007',
-        'alamat'=>'cianjur',
-        'password' => Hash::make('12345678'),
-        'role' => 'owner'
-    ]);
 
-    User::create([
-        'name' => 'Karyawan',
-        'email' => 'karyawan@gmail.com',
-        'no_hp' => '023920137',
-        'ttl' => '10-03-2007',
-        'alamat'=>'cianjur',
-        'password' => Hash::make('12345678'),
-        'role' => 'karyawan'
-    ]);
+        User::firstOrCreate(['email' => 'owner@gmail.com'], [
+            'name'     => 'Boss deng',
+            'no_hp'    => '023920138',
+            'ttl'      => '2007-03-10',
+            'alamat'   => 'cianjur',
+            'password' => Hash::make('12345678'),
+            'role'     => 'owner',
+        ]);
+
+        User::firstOrCreate(['email' => 'karyawan@gmail.com'], [
+            'name'     => 'Karyawan',
+            'no_hp'    => '023920137',
+            'ttl'      => '2007-03-10',
+            'alamat'   => 'cianjur',
+            'password' => Hash::make('12345678'),
+            'role'     => 'karyawan',
+        ]);
     }
 
 }

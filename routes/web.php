@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\TransaksiController as AdminTransaksi;
 use App\Http\Controllers\Admin\TreatmentController;
 use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\JamKerjaController;
+use App\Http\Controllers\Admin\GajiController as AdminGaji;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ use App\Http\Controllers\Admin\JamKerjaController;
 */
 use App\Http\Controllers\Owner\DashboardController as OwnerDashboard;
 use App\Http\Controllers\Owner\LaporanController as OwnerLaporan;
+use App\Http\Controllers\Owner\KaryawanController as OwnerKaryawan;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +38,9 @@ use App\Http\Controllers\Owner\LaporanController as OwnerLaporan;
 use App\Http\Controllers\Karyawan\DashboardController as KaryawanDashboard;
 use App\Http\Controllers\Karyawan\TransaksiController as KaryawanTransaksi;
 use App\Http\Controllers\Karyawan\PelangganController as KaryawanPelanggan;
+use App\Http\Controllers\Karyawan\LayananController as KaryawanLayanan;
+use App\Http\Controllers\Karyawan\TreatmentController as KaryawanTreatment;
+use App\Http\Controllers\Karyawan\GajiController as KaryawanGaji;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +114,8 @@ Route::post('/absensi', [AdminAbsensi::class, 'store'])->name('absensi.store');
 
         Route::get('laporan/cetak', [AdminLaporan::class, 'cetakPdf'])
             ->name('laporan.cetak.pdf');
+
+        Route::resource('gaji', AdminGaji::class)->only(['index','create','store','destroy']);
     });
 
 /*
@@ -125,6 +132,10 @@ Route::prefix('owner')
 
         Route::get('/laporan', [OwnerLaporan::class, 'index'])->name('laporan.index');
         Route::get('/laporan/pdf', [OwnerLaporan::class, 'pdf'])->name('laporan.pdf');
+        Route::get('/laporan/csv', [OwnerLaporan::class, 'exportCsv'])->name('laporan.csv');
+
+        Route::get('/karyawan', [OwnerKaryawan::class, 'index'])->name('karyawan.index');
+        Route::get('/karyawan/{karyawan}', [OwnerKaryawan::class, 'show'])->name('karyawan.show');
     });
 
 /*
@@ -144,7 +155,10 @@ Route::prefix('karyawan')
         Route::put('/transaksi/{transaksi}/konfirmasi-bayar', [KaryawanTransaksi::class, 'konfirmasiBayar'])->name('transaksi.konfirmasi-bayar');
         Route::get('transaksi/{transaksi}/invoice', [KaryawanTransaksi::class, 'invoice'])->name('transaksi.invoice');
         Route::resource('transaksi', KaryawanTransaksi::class);
-        Route::resource('pelanggan', KaryawanPelanggan::class);
+        Route::resource('pelanggan', KaryawanPelanggan::class)->except(['create', 'store']);
+        Route::resource('layanans', KaryawanLayanan::class);
+        Route::resource('treatments', KaryawanTreatment::class);
+        Route::get('/gaji', [KaryawanGaji::class, 'index'])->name('gaji.index');
     });
 
 /*

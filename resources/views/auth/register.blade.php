@@ -101,7 +101,7 @@
 
         <!-- Bagian Kanan -->
         <div class="bg-blue-500 relative hidden md:block">
-            <img src="assets/img/logo.jpg" alt="Logo Silit Laundry" 
+            <img src="assets/img/logo.jpg" alt="Logo InstaWash" 
                 class="w-full h-full object-cover">
         </div>
     </div>

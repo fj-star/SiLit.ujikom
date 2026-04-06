@@ -23,7 +23,7 @@
         <li>Status: {{ ucfirst($transaksi->status) }}</li>
     </ul>
 
-    <p>Terima kasih sudah menggunakan layanan kami <strong>E-laundry Silit</strong>! 💙</p>
+    <p>Terima kasih sudah menggunakan layanan kami <strong>InstaWash Laundry</strong>! 💙</p>
 
     <hr>
     <small>Email ini dikirim otomatis, mohon tidak dibalas.</small>

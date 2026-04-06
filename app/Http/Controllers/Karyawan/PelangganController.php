@@ -18,37 +18,6 @@ class PelangganController extends Controller
         return view('pages.karyawan.pelanggan.index', compact('pelanggans'));
     }
 
-    // 2. Menampilkan form tambah (INI YANG TADI HILANG BEST)
-    public function create()
-    {
-        return view('pages.karyawan.pelanggan.create');
-    }
-
-    // 3. Menyimpan data pelanggan baru
-    public function store(Request $request)
-    {
-        $data = $request->validate([
-            'name'   => 'required|string|max:255',
-            'email'  => 'required|email|unique:users,email',
-            'no_hp'  => 'required|numeric',
-            'alamat' => 'required|string',
-            'ttl'    => 'required|string',
-        ]);
-
-        User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => Hash::make('pelanggan123'), // Password bawaan
-            'no_hp'    => $data['no_hp'],
-            'alamat'   => $data['alamat'],
-            'ttl'      => $data['ttl'],
-            'role'     => 'pelanggan',
-        ]);
-
-        return redirect()
-            ->route('karyawan.pelanggan.index')
-            ->with('success', 'Pelanggan baru berhasil ditambahkan!');
-    }
 
     // 4. Menampilkan form edit
     public function edit(User $pelanggan)

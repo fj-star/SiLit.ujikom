@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -11,31 +10,33 @@ use Faker\Factory as Faker;
 
 class CustomerSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $faker = Faker::create('id_ID');
 
         for($i = 1; $i <= 10; $i++) {
-            $user = User::create([
-                'name' => $faker->name,
-                'email' => 'pelanggan' . $i . '@gmail.com',
-                'password' => Hash::make('12345678'),
-                'role' => 'pelanggan',
-                'no_hp' => $faker->phoneNumber,
-                'alamat' => $faker->address,
-                'ttl' => $faker->date('d-m-Y', '2005-01-01'),
-            ]);
+            $email = 'pelanggan' . $i . '@gmail.com';
 
-            // Jika tabel pelanggan butuh duplikasi kolom ini, kita isi juga
-            Pelanggan::create([
-                'user_id' => $user->id,
-                'no_hp' => $user->no_hp,
-                'alamat' => $user->alamat,
-                'ttl' => $user->ttl,
-            ]);
+            $user = User::firstOrCreate(
+                ['email' => $email],
+                [
+                    'name'     => $faker->name,
+                    'password' => Hash::make('12345678'),
+                    'role'     => 'pelanggan',
+                    'no_hp'    => '0812' . rand(10000000, 99999999),
+                    'alamat'   => $faker->address,
+                    'ttl'      => $faker->date('Y-m-d', '2005-01-01'),
+                ]
+            );
+
+            Pelanggan::firstOrCreate(
+                ['user_id' => $user->id],
+                [
+                    'no_hp'  => $user->no_hp,
+                    'alamat' => $user->alamat,
+                    'ttl'    => $user->ttl,
+                ]
+            );
         }
     }
 }

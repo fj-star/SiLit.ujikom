@@ -4,9 +4,6 @@
 <div class="card shadow">
     <div class="card-header d-flex justify-content-between align-items-center bg-white py-3">
         <h5 class="m-0 font-weight-bold text-primary">Data Pelanggan InstaWash</h5>
-        <a href="{{ route('karyawan.pelanggan.create') }}" class="btn btn-primary btn-sm shadow-sm">
-            <i class="fas fa-plus fa-sm"></i> Tambah Pelanggan
-        </a>
     </div>
 
     <div class="card-body">
@@ -41,13 +38,13 @@
                         <td><small>{{ $p->ttl ?? '-' }}</small></td>
                         <td><small>{{ Str::limit($p->alamat, 40) }}</small></td>
                         <td class="text-center">
-                            <a href="{{ route('karyawan.pelanggan.edit',$p->id) }}" class="btn btn-sm btn-warning shadow-sm"><i class="fas fa-edit"></i></a>
-                            
-                            <form action="{{ route('karyawan.pelanggan.destroy',$p->id) }}" method="POST" class="d-inline delete-form">
-                                @csrf
-                                @method('DELETE')
-                                <button type="button" class="btn btn-sm btn-danger shadow-sm btn-delete"><i class="fas fa-trash"></i></button>
-                            </form>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <a href="{{ route('karyawan.pelanggan.edit',$p->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
+                                <form action="{{ route('karyawan.pelanggan.destroy',$p->id) }}" method="POST" class="d-inline delete-form">
+                                    @csrf @method('DELETE')
+                                    <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                     @empty

@@ -9,12 +9,23 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label>Pilih Pelanggan</label>
-                        <select name="user_id" class="form-control" required>
-                            <option value="">-- Pilih --</option>
+                        <select name="pelanggan_id" id="pelanggan_select" class="form-control">
+                            <option value="">-- Guest (Tanpa Akun) --</option>
                             @foreach ($pelanggans as $p)
                                 <option value="{{ $p->id }}">{{ $p->name }} ({{ $p->no_hp }})</option>
                             @endforeach
                         </select>
+                        <small class="text-muted">Kosongkan jika pelanggan tidak memiliki akun.</small>
+                    </div>
+                    <div class="mb-3" id="nama_tamu_wrapper">
+                        <label>Nama Tamu <span class="text-muted">(opsional)</span></label>
+                        <input type="text" name="nama_tamu" id="nama_tamu" class="form-control" placeholder="Nama pelanggan walk-in...">
+                        <small class="text-muted">Diisi jika pelanggan tidak punya akun.</small>
+                    </div>
+                    <div class="mb-3" id="kontak_tamu_wrapper">
+                        <label>No HP / Email Tamu <span class="text-muted">(opsional)</span></label>
+                        <input type="text" name="kontak_tamu" class="form-control" placeholder="0812... atau email@...">
+                        <small class="text-muted">Untuk kebutuhan menghubungi pelanggan.</small>
                     </div>
                     <div class="mb-3">
                         <label>Metode Pembayaran</label>
@@ -77,5 +88,17 @@
     layanan.addEventListener('change', hitung);
     treatment.addEventListener('change', hitung);
     berat.addEventListener('input', hitung);
+
+    // Show/hide nama tamu
+    const pelangganSelect = document.getElementById('pelanggan_select');
+    const namaTamuWrapper = document.getElementById('nama_tamu_wrapper');
+    const kontakTamuWrapper = document.getElementById('kontak_tamu_wrapper');
+    function toggleTamu() {
+        const isGuest = pelangganSelect.value === '';
+        namaTamuWrapper.style.display = isGuest ? 'block' : 'none';
+        kontakTamuWrapper.style.display = isGuest ? 'block' : 'none';
+    }
+    pelangganSelect.addEventListener('change', toggleTamu);
+    toggleTamu(); // init
 </script>
 @endsection

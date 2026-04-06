@@ -12,6 +12,8 @@ class Transaksi extends Model
     protected $fillable = [
         'user_id',
         'pelanggan_id',
+        'nama_tamu',
+        'kontak_tamu',
         'layanan_id',
         'treatment_id',
         'berat',

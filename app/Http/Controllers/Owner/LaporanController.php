@@ -59,6 +59,49 @@ class LaporanController extends Controller
             'to'         => $to,
         ])->setPaper('A4', 'portrait');
 
-        return $pdf->download('laporan-silit-laundry-' . $from . '.pdf');
+        return $pdf->download('laporan-instawash-' . $from . '.pdf');
+    }
+
+    public function exportCsv(Request $request)
+    {
+        $from = $request->get('from', Carbon::now()->startOfMonth()->toDateString());
+        $to   = $request->get('to', Carbon::now()->toDateString());
+
+        $query = Transaksi::with(['pelanggan', 'user', 'layanan'])->where('payment_status', 'paid');
+
+        if ($from && $to) {
+            $query->whereBetween('created_at', [$from . ' 00:00:00', $to . ' 23:59:59']);
+        }
+
+        $transaksis = $query->latest()->get();
+
+        $filename = 'laporan-instawash-' . $from . '-sd-' . $to . '.csv';
+
+        $headers = [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ];
+
+        $callback = function () use ($transaksis) {
+            $file = fopen('php://output', 'w');
+            // BOM untuk Excel agar UTF-8 terbaca dengan benar
+            fputs($file, "\xEF\xBB\xBF");
+            // Header kolom
+            fputcsv($file, ['No', 'Tanggal', 'Order ID', 'Pelanggan', 'Layanan', 'Status', 'Total Harga']);
+            foreach ($transaksis as $i => $t) {
+                fputcsv($file, [
+                    $i + 1,
+                    $t->created_at->format('d/m/Y'),
+                    $t->order_id,
+                    $t->pelanggan->name ?? $t->user->name ?? 'Guest',
+                    $t->layanan->nama_layanan ?? '-',
+                    strtoupper($t->status),
+                    $t->total_harga,
+                ]);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

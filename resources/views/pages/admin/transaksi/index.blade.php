@@ -26,6 +26,8 @@
                             <th>Order ID</th>
                             <th>Pelanggan</th>
                             <th>Layanan</th>
+                            <th>Treatment</th>
+                            <th>Diskon</th>
                             <th>Total Harga</th>
                             <th>Metode</th>
                             <th>Status Bayar</th>
@@ -38,8 +40,30 @@
                         <tr>
                             <td class="text-center">{{ $index + 1 }}</td>
                             <td><small class="font-weight-bold">{{ $transaksi->order_id }}</small></td>
-                            <td>{{ $transaksi->user?->name ?? 'User Terhapus' }}</td>
+                            <td>
+                                @if($transaksi->pelanggan)
+                                    {{ $transaksi->pelanggan->name }}
+                                @elseif($transaksi->nama_tamu)
+                                    {{ $transaksi->nama_tamu }} <span class="badge bg-secondary" style="font-size:9px">tamu</span>
+                                @else
+                                    <span class="text-muted">Guest</span>
+                                @endif
+                            </td>
                             <td>{{ $transaksi->layanan?->nama_layanan }}</td>
+                            <td>
+                                @if($transaksi->treatment)
+                                    <span class="badge bg-info">{{ $transaksi->treatment->nama_treatment }}</span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($transaksi->treatment && $transaksi->treatment->diskon > 0)
+                                    <span class="badge bg-warning text-dark">{{ $transaksi->treatment->diskon }}%</span>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
                             <td class="text-right">Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</td>
                             <td class="text-center"><span class="badge badge-dark">{{ strtoupper($transaksi->metode_pembayaran) }}</span></td>
                             <td class="text-center">
@@ -64,7 +88,7 @@
                             </td>
                         </tr>
                         @empty
-                        <tr><td colspan="9" class="text-center">Data tidak ditemukan</td></tr>
+                        <tr><td colspan="11" class="text-center">Data tidak ditemukan</td></tr>
                         @endforelse
                     </tbody>
                 </table>

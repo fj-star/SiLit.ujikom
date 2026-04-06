@@ -1,9 +1,23 @@
 @extends('layouts.main')
-
 @section('title','Dashboard Karyawan')
-
 @section('content')
-<h4 class="mb-4">Dashboard Karyawan</h4>
+
+{{-- Welcome Banner --}}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow p-4 bg-primary text-white rounded-3">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-user-circle fa-3x mr-4"></i>
+                <div>
+                    <h4 class="mb-0">Selamat Datang, {{ auth()->user()->name }}!</h4>
+                    <p class="mb-0 small">Dashboard Karyawan – InstaWash Laundry</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h5 class="mb-3">Ringkasan Hari Ini</h5>
 
 <div class="row mb-4">
     <div class="col-md-4">
@@ -35,12 +49,20 @@
 </div>
 
 <div class="mb-3">
-    <a href="{{ route('karyawan.transaksi.index') }}" class="btn btn-primary">
-         Transaksi
+    <a href="{{ route('karyawan.transaksi.create') }}" class="btn btn-primary me-2">
+        <i class="fas fa-plus"></i> Input Transaksi
     </a>
-
-    <a href="{{ route('karyawan.pelanggan.index') }}" class="btn btn-success">
-        Pelanggan
+    <a href="{{ route('karyawan.transaksi.index') }}" class="btn btn-outline-primary me-2">
+        <i class="fas fa-exchange-alt"></i> Daftar Transaksi
+    </a>
+    <a href="{{ route('karyawan.layanans.index') }}" class="btn btn-outline-success me-2">
+        <i class="fas fa-box"></i> Layanan
+    </a>
+    <a href="{{ route('karyawan.treatments.index') }}" class="btn btn-outline-info me-2">
+        <i class="fas fa-star"></i> Treatment
+    </a>
+    <a href="{{ route('karyawan.gaji.index') }}" class="btn btn-outline-warning">
+        <i class="fas fa-wallet"></i> Gaji Saya
     </a>
 </div>
 
@@ -61,8 +83,16 @@
             <tbody>
                 @forelse($transaksiTerbaru as $t)
                 <tr>
-                    <td>#{{ $t->id }}</td>
-                    <td>{{ $t->user->name ?? '-' }}</td>
+                    <td>{{ $t->order_id ?? '#'.$t->id }}</td>
+                    <td>
+                        @if($t->pelanggan)
+                            {{ $t->pelanggan->name }}
+                        @elseif($t->nama_tamu)
+                            {{ $t->nama_tamu }} <span class="badge bg-secondary" style="font-size:9px">tamu</span>
+                        @else
+                            <span class="text-muted">Guest</span>
+                        @endif
+                    </td>
                     <td>
                         <span class="badge bg-{{ $t->status == 'selesai' ? 'success' : 'warning' }}">
                             {{ ucfirst($t->status) }}

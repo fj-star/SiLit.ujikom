@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan SiLit Laundry</title>
+    <title>Laporan InstaWash Laundry</title>
     <style>
         body { font-family: sans-serif; font-size: 11px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
@@ -13,7 +13,7 @@
 </head>
 <body>
     <div class="header">
-        <h2>LAPORAN TRANSAKSI SILIT LAUNDRY</h2>
+        <h2>LAPORAN TRANSAKSI INSTAWASH LAUNDRY</h2>
         <p>Periode: {{ $from }} s/d {{ $to }}</p>
     </div>
     <table>
