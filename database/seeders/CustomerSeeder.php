@@ -21,8 +21,8 @@ class CustomerSeeder extends Seeder
         for($i = 1; $i <= 10; $i++) {
             $user = User::create([
                 'name' => $faker->name,
-                'email' => 'pelanggan' . $i . '@example.com',
-                'password' => Hash::make('password'),
+                'email' => 'pelanggan' . $i . '@gmail.com',
+                'password' => Hash::make('12345678'),
                 'role' => 'pelanggan',
                 'no_hp' => $faker->phoneNumber,
                 'alamat' => $faker->address,
