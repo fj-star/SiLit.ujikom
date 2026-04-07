@@ -11,7 +11,7 @@ class AdminUserSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate(['email' => 'admin@gmail.com'], [
-            'name'     => 'Fazril',
+            'name'     => 'Admin',
             'no_hp'    => '0239201392',
             'ttl'      => '2007-03-10',
             'alamat'   => 'cianjur',
@@ -20,7 +20,7 @@ class AdminUserSeeder extends Seeder
         ]);
 
         User::firstOrCreate(['email' => 'owner@gmail.com'], [
-            'name'     => 'Boss deng',
+            'name'     => 'Owner',
             'no_hp'    => '023920138',
             'ttl'      => '2007-03-10',
             'alamat'   => 'cianjur',
