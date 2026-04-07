@@ -25,7 +25,7 @@ class TransaksiController extends Controller
     {
         return view('pages.karyawan.transaksi-create', [
             'pelanggans' => User::where('role', 'pelanggan')->get(),
-            'layanans'   => Layanan::all(),
+            'layanans' => Layanan::all(),
             'treatments' => Treatment::all(),
         ]);
     }
@@ -33,19 +33,19 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'pelanggan_id'      => 'nullable|exists:users,id',
-            'nama_tamu'         => 'nullable|string|max:255',
-            'kontak_tamu'       => 'nullable|string|max:255',
-            'layanan_id'        => 'required|exists:layanans,id',
-            'treatment_id'      => 'nullable|exists:treatments,id',
-            'berat'             => 'required|numeric|min:0.1',
+            'pelanggan_id' => 'nullable|exists:users,id',
+            'nama_tamu' => 'nullable|string|max:255',
+            'kontak_tamu' => 'nullable|string|max:255',
+            'layanan_id' => 'required|exists:layanans,id',
+            'treatment_id' => 'nullable|exists:treatments,id',
+            'berat' => 'required|numeric|min:0.1',
             'metode_pembayaran' => 'required|in:cash,midtrans',
         ]);
 
-        $data['user_id']        = auth()->id();
-        $data['order_id']       = 'INV-' . strtoupper(uniqid());
-        $data['created_by']     = 'karyawan';
-        $data['status']         = 'pending';
+        $data['user_id'] = auth()->id();
+        $data['order_id'] = 'INV-' . strtoupper(uniqid());
+        $data['created_by'] = 'karyawan';
+        $data['status'] = 'pending';
         $data['payment_status'] = 'pending';
 
         $data['total_harga'] = $this->hitungTotalHarga(
@@ -69,52 +69,52 @@ class TransaksiController extends Controller
     public function edit(Transaksi $transaksi)
     {
         return view('pages.karyawan.transaksi-edit', [
-            'transaksi'  => $transaksi,
-            'layanans'   => Layanan::all(),
+            'transaksi' => $transaksi,
+            'layanans' => Layanan::all(),
             'treatments' => Treatment::all(),
         ]);
     }
 
-   public function update(Request $request, Transaksi $transaksi)
-{
-    // 1. Validasi Status Laundry (Selalu Wajib)
-    $rules = [
-        'status' => 'required|in:pending,proses,selesai',
-    ];
-
-    // 2. Validasi Tambahan (Hanya jika belum bayar)
-    // Kita buat nullable/opsional biar nggak bentrok sama form
-    if ($transaksi->payment_status !== 'paid') {
-        $rules += [
-            'layanan_id'        => 'required|exists:layanans,id',
-            'berat'             => 'required|numeric|min:0.1',
-            'treatment_id'      => 'nullable|exists:treatments,id',
-            'metode_pembayaran' => 'nullable|in:cash,midtrans', 
+    public function update(Request $request, Transaksi $transaksi)    {
+        // 1. Validasi Status Laundry (Selalu Wajib)
+        $rules = [
+            'status' => 'required|in:pending,proses,selesai',
         ];
-    }
 
-    $request->validate($rules);
+        // 2. Validasi Tambahan (Hanya jika belum bayar)
+        // Kita buat nullable/opsional biar nggak bentrok sama form
+        if ($transaksi->payment_status !== 'paid') {
+            $rules += [
+                'layanan_id' => 'required|exists:layanans,id',
+                'berat' => 'required|numeric|min:0.1',
+                'treatment_id' => 'nullable|exists:treatments,id',
+                'metode_pembayaran' => 'nullable|in:cash,midtrans',
+            ];
+        }
 
-    // 3. Update Status Laundry
-    $transaksi->status = $request->status;
+        $request->validate($rules);
 
-    // 4. Update Detail Pesanan (Jika belum bayar)
-    if ($transaksi->payment_status !== 'paid') {
-        $transaksi->layanan_id = $request->layanan_id;
-        $transaksi->berat = $request->berat;
-        
-        // Update treatment & metode jika ada di input
-        if ($request->has('treatment_id')) $transaksi->treatment_id = $request->treatment_id;
-        if ($request->has('metode_pembayaran')) $transaksi->metode_pembayaran = $request->metode_pembayaran;
+        // 3. Update Status Laundry
+        $transaksi->status = $request->status;
 
-        $transaksi->total_harga = $this->hitungTotalHarga($request->layanan_id, $transaksi->treatment_id, $request->berat);
-    }
+        // 4. Update Detail Pesanan (Jika belum bayar)
+        if ($transaksi->payment_status !== 'paid') {
+            $transaksi->layanan_id = $request->layanan_id;
+            $transaksi->berat = $request->berat;
 
-    $transaksi->save(); // Simpan paksa ke database
+            // Update treatment & metode jika ada di input
+            if ($request->has('treatment_id'))
+                $transaksi->treatment_id = $request->treatment_id;
+            if ($request->has('metode_pembayaran'))
+                $transaksi->metode_pembayaran = $request->metode_pembayaran;
 
-    return redirect()->route('karyawan.transaksi.index')
-        ->with('success', 'Status InstaWash Berhasil Diperbarui!');
-}
+            $transaksi->total_harga = $this->hitungTotalHarga($request->layanan_id, $transaksi->treatment_id, $request->berat);
+        }
+
+        $transaksi->save(); // Simpan paksa ke database
+
+        return redirect()->route('karyawan.transaksi.index')
+            ->with('success', 'Status InstaWash Berhasil Diperbarui!');    }
 
     // Invoice Transaksi
     public function invoice(Transaksi $transaksi)
@@ -131,18 +131,16 @@ class TransaksiController extends Controller
         return back()->with('success', 'Transaksi berhasil dihapus');
     }
 
-    public function konfirmasiBayar(Transaksi $transaksi)
-{
-    // Pastikan cuma yang cash dan masih pending yang bisa dikonfirmasi
-    if ($transaksi->metode_pembayaran === 'cash' && $transaksi->payment_status === 'pending') {
-        $transaksi->payment_status = 'paid';
-        $transaksi->save();
+    public function konfirmasiBayar(Transaksi $transaksi)    {
+        // Pastikan cuma yang cash dan masih pending yang bisa dikonfirmasi
+        if ($transaksi->metode_pembayaran === 'cash' && $transaksi->payment_status === 'pending') {
+            $transaksi->payment_status = 'paid';
+            $transaksi->save();
 
-        return back()->with('success', 'Pembayaran Cash Berhasil Dikonfirmasi! Lunas maseeh.');
-    }
+            return back()->with('success', 'Pembayaran Cash Berhasil Dikonfirmasi! Lunas maseeh.');
+        }
 
-    return back()->with('error', 'Gagal konfirmasi, cek metode pembayaran.');
-}
+        return back()->with('error', 'Gagal konfirmasi, cek metode pembayaran.');    }
 
     private function hitungTotalHarga($layanan_id, $treatment_id, $berat)
     {

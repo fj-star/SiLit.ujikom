@@ -15,8 +15,8 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        // Memastikan relasi user (pelanggan) terpanggil
-        $transaksis = Transaksi::with(['user', 'layanan', 'treatment'])
+        // Memastikan relasi pelanggan terpanggil
+        $transaksis = Transaksi::with(['user', 'pelanggan', 'layanan', 'treatment'])
             ->latest()
             ->get();
 
@@ -35,12 +35,16 @@ class TransaksiController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'user_id'           => 'required|exists:users,id', // Konsisten pakai user_id
+            'user_id'           => 'required|exists:users,id', // pelanggan yang dipilih
             'layanan_id'        => 'required|exists:layanans,id',
             'treatment_id'      => 'nullable|exists:treatments,id',
             'berat'             => 'required|numeric|min:0.1',
             'metode_pembayaran' => 'required|in:cash,midtrans',
         ]);
+
+        // Map user_id dari form ke pelanggan_id, lalu set user_id ke admin yang login
+        $data['pelanggan_id']   = $data['user_id'];
+        $data['user_id']        = auth()->id();
 
         // Buat Order ID Unik untuk Midtrans
         $data['order_id']       = 'INV-' . strtoupper(uniqid());
