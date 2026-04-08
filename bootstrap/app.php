@@ -17,11 +17,12 @@ return Application::configure(basePath: dirname(__DIR__))
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
     ]);
 
-    // Tambahkan ini biar Ngrok gak bikin error "Insecure" atau CSS pecah
+    
     $middleware->trustProxies(at: '*'); 
 
     $middleware->validateCsrfTokens(except: [
-        '/midtrans/callback', 
+        'midtrans/callback', 
+        'midtrans/*',
     ]);
 })
     ->withExceptions(function (Exceptions $exceptions) {
