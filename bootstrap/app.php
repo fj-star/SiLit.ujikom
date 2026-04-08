@@ -21,7 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
     $middleware->trustProxies(at: '*'); 
 
     $middleware->validateCsrfTokens(except: [
-        'midtrans/callback', 
+        'midtrans/callback/', 
         'midtrans/*',
     ]);
 })
