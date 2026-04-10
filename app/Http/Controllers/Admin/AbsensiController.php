@@ -137,12 +137,12 @@ class AbsensiController extends Controller
             $batasMasuk = \Carbon\Carbon::createFromTimeString($batasText);
             $batasToleransi = $batasMasuk->copy()->addMinutes($toleransi);
 
-            if ($now->gt($batasToleransi)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Gagal! Waktu keterlambatan melampaui batas toleransi (' . $toleransi . ' menit).'
-                ]);
-            }
+//            if ($now->gt($batasToleransi)) {
+//                return response()->json([
+//                    'success' => false,
+//                    'message' => 'Gagal! Waktu keterlambatan melampaui batas toleransi (' . $toleransi . ' menit).'
+//                ]);
+//            }
 
             $status = $now->gt($batasMasuk) ? 'terlambat' : 'hadir';
 

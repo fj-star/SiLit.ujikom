@@ -16,7 +16,7 @@ class TransaksiController extends Controller
     public function index()
     {
         $transaksis = Transaksi::with(['layanan','treatment'])
-            ->where('user_id', auth()->id()) // SEKARANG PELANGGAN BISA MELIHAT TRANSAKSI MEREKA
+            ->where('pelanggan_id', auth()->id()) // SEKARANG PELANGGAN BISA MELIHAT TRANSAKSI MEREKA
             ->latest()
             ->get();
 
@@ -51,6 +51,7 @@ class TransaksiController extends Controller
             Transaksi::create([
                 'user_id' => auth()->id(),
                 'pelanggan_id' => auth()->id(),
+                'order_id' => 'INV-' . strtoupper(uniqid()),
                 'layanan_id' => $data['layanan_id'],
                 'treatment_id' => $data['treatment_id'],
                 'berat' => $data['berat'],
@@ -72,7 +73,7 @@ class TransaksiController extends Controller
     {
         $user = auth()->user();
         // IZINKAN pembayaran jika dia Kasir/Admin, ATAU jika dia adalah PELANGGAN pemilik nota ini
-        abort_if($user->role === 'pelanggan' && $transaksi->user_id !== $user->id, 403);
+        abort_if($user->role === 'pelanggan' && $transaksi->pelanggan_id !== $user->id, 403);
 
         if ($transaksi->payment_status === 'paid') {
             return redirect()->back()->with('success', 'Transaksi sudah lunas');
@@ -82,8 +83,8 @@ class TransaksiController extends Controller
 
         $newOrderId = 'INSTA-' . $transaksi->id . '-' . time();
         
-        // user_id menyimpan ID pelanggan di aplikasi ini
-        $pelanggan = \App\Models\User::find($transaksi->user_id);
+        // pelanggan_id menyimpan ID pelanggan di aplikasi ini
+        $pelanggan = \App\Models\User::find($transaksi->pelanggan_id);
 
         try {
             $snapToken = \Midtrans\Snap::getSnapToken([
@@ -124,7 +125,7 @@ class TransaksiController extends Controller
     public function forcePaid(Transaksi $transaksi)
     {
         $user = auth()->user();
-        abort_if($user->role === 'pelanggan' && $transaksi->user_id !== $user->id, 403);
+        abort_if($user->role === 'pelanggan' && $transaksi->pelanggan_id !== $user->id, 403);
         $transaksi->update(['payment_status' => 'paid']);
         return response()->json(['success' => true, 'message' => 'Status forced to paid']);
     }
@@ -132,7 +133,7 @@ class TransaksiController extends Controller
     // Halaman Invoice (Tampilan Saja, Tanpa Tombol Print)
     public function invoice(Transaksi $transaksi)
     {
-        abort_if($transaksi->user_id !== auth()->id(), 403);
+        abort_if($transaksi->pelanggan_id !== auth()->id(), 403);
         
         return view('pages.transaksi.invoice', [
             'transaksi' => $transaksi,
