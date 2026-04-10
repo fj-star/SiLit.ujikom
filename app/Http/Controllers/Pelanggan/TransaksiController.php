@@ -73,7 +73,7 @@ class TransaksiController extends Controller
     {
         $user = auth()->user();
         // IZINKAN pembayaran jika dia Kasir/Admin, ATAU jika dia adalah PELANGGAN pemilik nota ini
-        abort_if($user->role === 'pelanggan' && $transaksi->pelanggan_id !== $user->id, 403);
+        abort_if($user->role === 'pelanggan' && $transaksi->pelanggan_id != $user->id, 403);
 
         if ($transaksi->payment_status === 'paid') {
             return redirect()->back()->with('success', 'Transaksi sudah lunas');
@@ -125,7 +125,7 @@ class TransaksiController extends Controller
     public function forcePaid(Transaksi $transaksi)
     {
         $user = auth()->user();
-        abort_if($user->role === 'pelanggan' && $transaksi->pelanggan_id !== $user->id, 403);
+        abort_if($user->role === 'pelanggan' && $transaksi->pelanggan_id != $user->id, 403);
         $transaksi->update(['payment_status' => 'paid']);
         return response()->json(['success' => true, 'message' => 'Status forced to paid']);
     }
@@ -133,7 +133,7 @@ class TransaksiController extends Controller
     // Halaman Invoice (Tampilan Saja, Tanpa Tombol Print)
     public function invoice(Transaksi $transaksi)
     {
-        abort_if($transaksi->pelanggan_id !== auth()->id(), 403);
+        abort_if($transaksi->pelanggan_id != auth()->id(), 403);
         
         return view('pages.transaksi.invoice', [
             'transaksi' => $transaksi,
