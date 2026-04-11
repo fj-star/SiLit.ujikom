@@ -40,10 +40,6 @@
                         <td class="text-center">
                             <div class="btn-group btn-group-sm" role="group">
                                 <a href="{{ route('karyawan.pelanggan.edit',$p->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i> Edit</a>
-                                <form action="{{ route('karyawan.pelanggan.destroy',$p->id) }}" method="POST" class="d-inline delete-form">
-                                    @csrf @method('DELETE')
-                                    <button type="button" class="btn btn-sm btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button>
-                                </form>
                             </div>
                         </td>
                     </tr>
