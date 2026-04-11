@@ -35,7 +35,7 @@ class AbsensiController extends Controller
         $riwayatAbsensis = Absensi::with('user')
                     ->where('tanggal', '!=', $today)
                     ->latest()
-                    ->paginate(20, ['*'], 'page_riwayat');
+                    ->get();
 
         return view('pages.admin.absensi.index', compact('absensisHariIni', 'riwayatAbsensis', 'stats'));
     }
