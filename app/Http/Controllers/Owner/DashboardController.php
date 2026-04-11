@@ -31,6 +31,7 @@ public function index()
     return view('pages.owner.dashboard', [
         'total_transaksi'  => Transaksi::count(),
         'omset_bulan_ini'  => Transaksi::whereMonth('created_at', $now->month)->where('status', 'selesai')->sum('total_harga') ?? 0,
+        'omset_hari_ini'   => Transaksi::whereDate('created_at', $now->toDateString())->where('status', 'selesai')->sum('total_harga') ?? 0,
         'pesanan_proses'   => Transaksi::whereIn('status', ['pending', 'proses'])->count() ?? 0,
         'total_pelanggan'  => \App\Models\User::where('role', 'pelanggan')->count() ?? 0,
         'transaksis'       => Transaksi::with('user')->latest()->limit(5)->get(),
