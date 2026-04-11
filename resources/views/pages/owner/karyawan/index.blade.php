@@ -7,10 +7,10 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-body table-responsive">
-            <table class="table table-hover align-middle" id="karyawanTable" width="100%" cellspacing="0">
+            <table class="table table-hover align-middle text-center" id="karyawanTable" width="100%" cellspacing="0">
                 <thead class="table-light">
                     <tr>
-                        <th>#</th>
+                        <th class="text-center">No</th>
                         <th>Nama Karyawan</th>
                         <th>No HP</th>
                         <th>Alamat</th>
@@ -56,9 +56,9 @@ $(document).ready(function() {
     $('#karyawanTable').DataTable({
         dom: 'Bfrtip',
         buttons: [
-            { extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel', className: 'btn btn-success btn-sm', exportOptions: { columns: ':not(:last-child)' } },
-            { extend: 'pdf',   text: '<i class="fas fa-file-pdf"></i> PDF',   className: 'btn btn-danger btn-sm', exportOptions: { columns: ':not(:last-child)' } },
-            { extend: 'print', text: '<i class="fas fa-print"></i> Print',   className: 'btn btn-secondary btn-sm', exportOptions: { columns: ':not(:last-child)' } }
+            { extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel', className: 'btn btn-success btn-sm', exportOptions: { columns: ':not(:last-child)' }, title: 'Data Karyawan InstaWash' },
+            { extend: 'pdf',   text: '<i class="fas fa-file-pdf"></i> PDF',   className: 'btn btn-danger btn-sm', exportOptions: { columns: ':not(:last-child)' }, title: 'Data Karyawan InstaWash' },
+            { extend: 'print', text: '<i class="fas fa-print"></i> Print',   className: 'btn btn-secondary btn-sm', exportOptions: { columns: ':not(:last-child)' }, title: 'Data Karyawan InstaWash' }
         ],
         language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/id.json' }
     });
