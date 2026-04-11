@@ -12,7 +12,7 @@ class KaryawanController extends Controller
     {
         $karyawans = User::where('role', 'karyawan')
             ->withCount(['transaksis as total_transaksi'])
-            ->paginate(15);
+            ->get();
         return view('pages.owner.karyawan.index', compact('karyawans'));
     }
 
