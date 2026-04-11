@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice {{ $transaksi->order_id }}</title>
+    <title>InstaWash</title>
     <!-- Tailwind untuk UI cepat dan rapi saat diprint -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -32,34 +32,16 @@
         <!-- Meta Data -->
         <div class="mb-4 text-sm mt-4">
             <div class="flex justify-between mb-1">
-                <span>Trx ID:</span>
-                <span class="font-bold">{{ $transaksi->order_id ?? 'INV-'.$transaksi->id }}</span>
-            </div>
-            <div class="flex justify-between mb-1">
-                <span>Tanggal:</span>
-                <span>{{ $transaksi->created_at->format('d/m/Y H:i') }}</span>
-            </div>
-            <div class="flex justify-between mb-1">
                 <span>Pelanggan:</span>
                 <span class="font-bold">
                     @if($transaksi->pelanggan)
                         {{ $transaksi->pelanggan->name }}
                     @elseif($transaksi->nama_tamu)
-                        {{ $transaksi->nama_tamu }} <small class="text-gray-400">(tamu)</small>
+                        {{ $transaksi->nama_tamu }}
                     @else
                         Guest
                     @endif
                 </span>
-            </div>
-            @if(!$transaksi->pelanggan && $transaksi->kontak_tamu)
-            <div class="flex justify-between mb-1">
-                <span>Kontak Tamu:</span>
-                <span class="font-bold text-blue-600">{{ $transaksi->kontak_tamu }}</span>
-            </div>
-            @endif
-            <div class="flex justify-between mb-1">
-                <span>Kasir/Admin:</span>
-                <span>{{ ucfirst($transaksi->created_by ?? 'Sistem') }}</span>
             </div>
         </div>
         
@@ -103,17 +85,6 @@
             <div class="flex justify-between font-bold text-lg">
                 <span>TOTAL TAGIHAN:</span>
                 <span>Rp {{ number_format($transaksi->total_harga, 0, ',', '.') }}</span>
-            </div>
-            
-            <div class="flex justify-between mt-4">
-                <span>Status Bayar:</span>
-                <span class="font-bold uppercase {{ $transaksi->payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">
-                    {{ $transaksi->payment_status == 'paid' ? 'LUNAS' : 'BELUM BAYAR' }}
-                </span>
-            </div>
-            <div class="flex justify-between mt-1">
-                <span>Metode:</span>
-                <span class="uppercase font-bold">{{ $transaksi->metode_pembayaran }}</span>
             </div>
         </div>
 
