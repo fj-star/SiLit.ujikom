@@ -134,7 +134,7 @@ class AbsensiController extends Controller
             $batasText = $jamKerjaConfig ? $jamKerjaConfig->jam_masuk : '08:00:00';
             $toleransi = $jamKerjaConfig ? $jamKerjaConfig->menit_toleransi : 0;
             
-            $batasMasuk = \Carbon\Carbon::createFromTimeString($batasText);
+            $batasMasuk = \Carbon\Carbon::parse($batasText);
             $batasToleransi = $batasMasuk->copy()->addMinutes($toleransi);
 
 //            if ($now->gt($batasToleransi)) {
@@ -170,7 +170,7 @@ class AbsensiController extends Controller
 
             $jamKerjaConfig = \App\Models\JamKerja::first();
             $batasPulangText = $jamKerjaConfig ? $jamKerjaConfig->jam_pulang : '17:00:00';
-            $batasPulang = \Carbon\Carbon::createFromTimeString($batasPulangText);
+            $batasPulang = \Carbon\Carbon::parse($batasPulangText);
 
             if ($now->lt($batasPulang)) {
                 return response()->json([

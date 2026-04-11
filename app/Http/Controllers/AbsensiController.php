@@ -41,7 +41,7 @@ class AbsensiController extends Controller
         // --- JIKA BELUM ADA DATA = ABSEN MASUK ---
         $jamKerjaConfig = \App\Models\JamKerja::first();
         $batasText = $jamKerjaConfig ? $jamKerjaConfig->jam_masuk : '08:00:00';
-        $batasMasuk = \Carbon\Carbon::createFromTimeString($batasText);
+        $batasMasuk = \Carbon\Carbon::parse($batasText);
         $status = $now->gt($batasMasuk) ? 'terlambat' : 'hadir';
 
         Absensi::create([
@@ -64,7 +64,7 @@ class AbsensiController extends Controller
         // 2. Cek apakah sudah waktunya pulang
         $jamKerjaConfig = \App\Models\JamKerja::first();
         $batasPulangText = $jamKerjaConfig ? $jamKerjaConfig->jam_pulang : '17:00:00';
-        $batasPulang = \Carbon\Carbon::createFromTimeString($batasPulangText);
+        $batasPulang = \Carbon\Carbon::parse($batasPulangText);
 
         if ($now->lt($batasPulang)) {
             return redirect()->route('karyawan.absensi.index')->with('error', 'Anda belum bisa melakukan absen pulang. Terima kasih, tetap kerja semangat!');
