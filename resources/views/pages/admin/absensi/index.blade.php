@@ -123,7 +123,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($riwayatAbsensis as $a)
+                                        @foreach($riwayatAbsensis as $a)
                                         <tr>
                                             <td><strong>{{ \Carbon\Carbon::parse($a->tanggal)->format('d M Y') }}</strong></td>
                                             <td><strong>{{ $a->user->name }}</strong></td>
@@ -144,11 +144,7 @@
                                                 </span>
                                             </td>
                                         </tr>
-                                        @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center text-muted">Belum ada data riwayat absensi.</td>
-                                        </tr>
-                                        @endforelse
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
